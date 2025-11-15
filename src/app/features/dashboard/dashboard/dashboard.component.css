@@ -1,0 +1,96 @@
+/* Override PrimeNG table styles for modern design */
+::ng-deep .p-datatable {
+  border-radius: 1rem !important;
+  overflow: hidden !important;
+  border: 1px solid #e5e7eb !important;
+}
+
+::ng-deep .p-datatable .p-datatable-thead > tr > th {
+  background: #f9fafb !important;
+  color: #374151 !important;
+  font-weight: 700 !important;
+  font-size: 0.875rem !important;
+  text-transform: none !important;
+  border: none !important;
+  border-bottom: 1px solid #e5e7eb !important;
+  padding: 1rem 1.5rem !important;
+}
+
+::ng-deep .p-datatable .p-datatable-tbody > tr {
+  background: white !important;
+  transition: all 0.2s ease !important;
+}
+
+::ng-deep .p-datatable .p-datatable-tbody > tr:hover {
+  background: #f9fafb !important;
+}
+
+::ng-deep .p-datatable .p-datatable-tbody > tr > td {
+  border: none !important;
+  border-bottom: 1px solid #f3f4f6 !important;
+  padding: 0.75rem 1.5rem !important;
+  color: #374151 !important;
+  font-size: 0.875rem !important;
+}
+
+::ng-deep .p-datatable .p-datatable-tbody > tr:last-child > td {
+  border-bottom: none !important;
+}
+
+/* Paginator styling */
+::ng-deep .p-paginator {
+  background: white !important;
+  border: none !important;
+  border-top: 1px solid #e5e7eb !important;
+  padding: 1rem 1.5rem !important;
+  border-radius: 0 0 1rem 1rem !important;
+}
+
+::ng-deep .p-paginator .p-paginator-pages .p-paginator-page {
+  min-width: 2.5rem !important;
+  height: 2.5rem !important;
+  border-radius: 0.5rem !important;
+  color: #6b7280 !important;
+  margin: 0 0.25rem !important;
+  border: 1px solid transparent !important;
+}
+
+::ng-deep .p-paginator .p-paginator-pages .p-paginator-page:hover {
+  background: #f3f4f6 !important;
+  border-color: #e5e7eb !important;
+}
+
+::ng-deep .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+  background: #3b82f6 !important;
+  color: white !important;
+  border-color: #3b82f6 !important;
+}
+
+::ng-deep .p-paginator .p-paginator-first,
+::ng-deep .p-paginator .p-paginator-prev,
+::ng-deep .p-paginator .p-paginator-next,
+::ng-deep .p-paginator .p-paginator-last {
+  min-width: 2.5rem !important;
+  height: 2.5rem !important;
+  border-radius: 0.5rem !important;
+  color: #6b7280 !important;
+  margin: 0 0.25rem !important;
+}
+
+::ng-deep .p-paginator .p-paginator-first:hover,
+::ng-deep .p-paginator .p-paginator-prev:hover,
+::ng-deep .p-paginator .p-paginator-next:hover,
+::ng-deep .p-paginator .p-paginator-last:hover {
+  background: #f3f4f6 !important;
+}
+
+::ng-deep .p-paginator .p-dropdown {
+  border: 1px solid #e5e7eb !important;
+  border-radius: 0.5rem !important;
+  height: 2.5rem !important;
+}
+
+::ng-deep .p-paginator .p-paginator-current {
+  color: #6b7280 !important;
+  font-size: 0.875rem !important;
+}

@@ -1,0 +1,382 @@
+<div class="space-y-6">
+  <!-- Page Header -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-3xl font-bold text-gray-800">Admin Dashboard</h1>
+      <p class="text-gray-600 mt-1">Welcome back! Here's what's happening today.</p>
+    </div>
+    <button class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors shadow-md hover:shadow-lg">
+      <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+      </svg>
+      Quick Action
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  @if (loading()) {
+    <div class="flex items-center justify-center h-64">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+    </div>
+  }
+
+  <!-- Stats Cards -->
+  @if (!loading() && stats()) {
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
+      <!-- Total Users Card -->
+      <div class="bg-gradient-to-br from-[#001f5c] to-[#0039a6] rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden">
+        <div class="p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-white text-sm font-medium">Total Users</h3>
+            <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+              </svg>
+            </div>
+          </div>
+          <p class="text-4xl font-bold text-white mb-1">{{stats()!.totalUsers}}</p>
+          <p class="text-xs text-white/70 mt-2">All registered users</p>
+        </div>
+      </div>
+
+      <!-- Active Users Card -->
+      <div class="bg-gradient-to-br from-[#00b894] to-[#00a080] rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden">
+        <div class="p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-white text-sm font-medium">Active Users</h3>
+            <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+          </div>
+          <p class="text-4xl font-bold text-white mb-1">{{stats()!.activeUsers}}</p>
+          <p class="text-xs text-white/70 mt-2">Currently active</p>
+        </div>
+      </div>
+
+      <!-- Total Roles Card -->
+      <div class="bg-gradient-to-br from-[#6c5ce7] to-[#5f4dc4] rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden">
+        <div class="p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-white text-sm font-medium">Total Roles</h3>
+            <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+              </svg>
+            </div>
+          </div>
+          <p class="text-4xl font-bold text-white mb-1">{{stats()!.totalRoles}}</p>
+          <p class="text-xs text-white/70 mt-2">Defined user roles</p>
+        </div>
+      </div>
+
+      <!-- Total Modules Card -->
+      <div class="bg-gradient-to-br from-[#f39c12] to-[#e67e22] rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden">
+        <div class="p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-white text-sm font-medium">Total Modules</h3>
+            <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+              </svg>
+            </div>
+          </div>
+          <p class="text-4xl font-bold text-white mb-1">12</p>
+          <p class="text-xs text-white/70 mt-2">System modules</p>
+        </div>
+      </div>
+
+      <!-- Total Sub Modules Card -->
+      <div class="bg-gradient-to-br from-[#e74c3c] to-[#c0392b] rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden">
+        <div class="p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-white text-sm font-medium">Total Sub Modules</h3>
+            <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
+              </svg>
+            </div>
+          </div>
+          <p class="text-4xl font-bold text-white mb-1">48</p>
+          <p class="text-xs text-white/70 mt-2">Module components</p>
+        </div>
+      </div>
+
+      <!-- Total Permissions Card -->
+      <div class="bg-gradient-to-br from-[#00b4d8] to-[#0096c7] rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden">
+        <div class="p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-white text-sm font-medium">Total Permissions</h3>
+            <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
+              </svg>
+            </div>
+          </div>
+          <p class="text-4xl font-bold text-white mb-1">{{stats()!.totalPermissions}}</p>
+          <p class="text-xs text-white/70 mt-2">Access permissions</p>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Recent Users Section -->
+  @if (!loading() && stats()) {
+    <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+      <!-- Card Header -->
+      <div class="px-6 py-5 border-b border-gray-100">
+        <div class="flex items-start justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-600 rounded-xl flex items-center justify-center shadow-md">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+              </svg>
+            </div>
+            <div>
+              <h2 class="text-xl font-bold text-gray-900">Recent Users</h2>
+              <p class="text-sm text-gray-500 mt-0.5">Latest user registrations</p>
+            </div>
+          </div>
+          <button class="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold rounded-lg transition-colors shadow-sm hover:shadow-md">
+            View Details
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </button>
+        </div>        
+      </div>
+      <div class="overflow-x-auto">
+        <p-table [value]="stats()!.recentUsers" dataKey="userId" class="w-full rounded-2xl border border-gray-100 shadow-lg"
+          [paginator]="true" [rows]="10" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+          [rowsPerPageOptions]="[10,20,50]" [responsiveLayout]="'scroll'">
+          <ng-template pTemplate="header">
+            <tr class="bg-gray-50 sticky top-0 z-10 rounded-t-2xl">
+              <th class="px-6 py-4 font-bold text-gray-700 text-left text-base rounded-tl-2xl">
+                <span class="inline-flex items-center gap-2">
+                  User
+                  <i class="pi pi-sort-alt text-gray-400"></i>
+                  <i class="pi pi-filter text-gray-400"></i>
+                </span>
+              </th>
+              <th class="px-6 py-4 font-bold text-gray-700 text-left text-base">
+                <span class="inline-flex items-center gap-2">
+                  Email
+                  <i class="pi pi-sort-alt text-gray-400"></i>
+                  <i class="pi pi-filter text-gray-400"></i>
+                </span>
+              </th>
+              <th class="px-6 py-4 font-bold text-gray-700 text-left text-base">
+                <span class="inline-flex items-center gap-2">
+                  Phone
+                  <i class="pi pi-sort-alt text-gray-400"></i>
+                  <i class="pi pi-filter text-gray-400"></i>
+                </span>
+              </th>
+              <th class="px-6 py-4 font-bold text-gray-700 text-left text-base">
+                <span class="inline-flex items-center gap-2">
+                  Status
+                  <i class="pi pi-sort-alt text-gray-400"></i>
+                  <i class="pi pi-filter text-gray-400"></i>
+                </span>
+              </th>
+              <th class="px-6 py-4 font-bold text-gray-700 text-left text-base rounded-tr-2xl">
+                <span class="inline-flex items-center gap-2">
+                  Created
+                  <i class="pi pi-sort-alt text-gray-400"></i>
+                  <i class="pi pi-filter text-gray-400"></i>
+                </span>
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-user>
+            <tr class="border-b last:border-b-0 border-gray-100 hover:bg-gray-100 transition-colors">
+              <td class="px-6 py-3 text-base">
+                <div class="flex items-center">
+                  <div class="w-9 h-9 bg-gradient-to-br from-primary-400 to-secondary-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                    {{getInitials(user.fullName)}}
+                  </div>
+                  <div class="ml-3">
+                    <p class="text-sm font-semibold text-gray-800">{{user.fullName}}</p>
+                    <p class="text-xs text-gray-500">@{{user.username}}</p>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-3 text-sm text-gray-700">{{user.email}}</td>
+              <td class="px-6 py-3 text-sm text-gray-700">{{user.phoneNumber || 'N/A'}}</td>
+              <td class="px-6 py-3">
+                <span 
+                  class="px-3 py-1 text-xs font-semibold rounded-full"
+                  [class.bg-success-100]="user.status === 'Active'"
+                  [class.text-success-700]="user.status === 'Active'"
+                  [class.bg-gray-100]="user.status === 'Inactive'"
+                  [class.text-gray-700]="user.status === 'Inactive'"
+                  [class.bg-danger-100]="user.status === 'Suspended'"
+                  [class.text-danger-700]="user.status === 'Suspended'">
+                  {{user.status}}
+                </span>
+              </td>
+              <td class="px-6 py-3 text-sm text-gray-700">{{user.createdAt | date:'short'}}</td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="paginatorleft">
+            <span></span>
+          </ng-template>
+          <ng-template pTemplate="paginatorright">
+            <span></span>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  }
+
+  <!-- Analytics Section - Charts Row 1 -->
+  @if (!loading() && stats()) {
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      
+      <!-- User Growth Chart -->
+      <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-100">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-lg font-bold text-gray-900">User Growth</h3>
+                <p class="text-xs text-gray-500">Monthly registration trend</p>
+              </div>
+            </div>
+            <span class="px-2.5 py-1 bg-green-50 text-green-700 text-xs font-semibold rounded-full">+12.5%</span>
+          </div>
+        </div>
+        <div class="p-4">
+          <div echarts [options]="userGrowthChartOption" class="h-64"></div>
+        </div>
+      </div>
+
+      <!-- User Status Distribution -->
+      <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-100">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-lg font-bold text-gray-900">Status Distribution</h3>
+                <p class="text-xs text-gray-500">User account status breakdown</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="p-4">
+          <div echarts [options]="statusDistributionChartOption" class="h-64"></div>
+        </div>
+      </div>
+
+    </div>
+  }
+
+  <!-- Analytics Section - Charts Row 2 -->
+  @if (!loading() && stats()) {
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      
+      <!-- Role Distribution Chart -->
+      <div class="lg:col-span-2 bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-100">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-lg font-bold text-gray-900">Role Distribution</h3>
+                <p class="text-xs text-gray-500">Users by role assignment</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="p-4">
+          <div echarts [options]="roleDistributionChartOption" class="h-64"></div>
+        </div>
+      </div>
+
+      <!-- Quick Stats Card -->
+      <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-100">
+          <h3 class="text-lg font-bold text-gray-900">Quick Stats</h3>
+          <p class="text-xs text-gray-500">System overview</p>
+        </div>
+        <div class="p-6 space-y-4">
+          <div class="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                </svg>
+              </div>
+              <div>
+                <p class="text-xs text-blue-600 font-medium">New Users</p>
+                <p class="text-lg font-bold text-blue-900">+24</p>
+              </div>
+            </div>
+            <span class="text-xs text-blue-600">This week</span>
+          </div>
+
+          <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+              </div>
+              <div>
+                <p class="text-xs text-green-600 font-medium">Active Now</p>
+                <p class="text-lg font-bold text-green-900">127</p>
+              </div>
+            </div>
+            <span class="text-xs text-green-600">Online</span>
+          </div>
+
+          <div class="flex items-center justify-between p-3 bg-orange-50 rounded-lg">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+              </div>
+              <div>
+                <p class="text-xs text-orange-600 font-medium">Pending</p>
+                <p class="text-lg font-bold text-orange-900">8</p>
+              </div>
+            </div>
+            <span class="text-xs text-orange-600">Actions</span>
+          </div>
+
+          <div class="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
+                </svg>
+              </div>
+              <div>
+                <p class="text-xs text-purple-600 font-medium">Permissions</p>
+                <p class="text-lg font-bold text-purple-900">{{stats()!.totalPermissions}}</p>
+              </div>
+            </div>
+            <span class="text-xs text-purple-600">Total</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  }
+</div>
