@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, delay } from 'rxjs';
-import { Role } from '../models/user.model';
+import { Role } from '../../features/roles/models/role.model';
 
 @Injectable({
   providedIn: 'root',

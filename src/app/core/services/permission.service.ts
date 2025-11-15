@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, delay } from 'rxjs';
-import { Permission, Module } from '../models/user.model';
+import { Permission } from '../../features/permissions/models/permission.model';
+import { Module } from '../../features/permissions/models/module.model';
 
 @Injectable({
   providedIn: 'root',

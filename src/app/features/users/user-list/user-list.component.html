@@ -12,7 +12,7 @@
         </svg>
         Export
       </button>
-      <button class="px-3 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors shadow-sm hover:shadow-md flex items-center text-sm">
+      <button (click)="addNewUser()" class="px-3 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors shadow-sm hover:shadow-md flex items-center text-sm">
         <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
         </svg>
@@ -119,10 +119,10 @@
               <td class="px-4 py-2.5">
                 <div class="flex items-center">
                   <div class="w-8 h-8 bg-gradient-to-br rounded-full flex items-center justify-center text-white font-bold text-xs" [ngClass]="getAvatarColor(user.userId)">
-                    {{getInitials(user.fullName)}}
+                    {{getInitials(user)}}
                   </div>
                   <div class="ml-2.5">
-                    <p class="text-sm font-semibold text-gray-800">{{user.fullName}}</p>
+                    <p class="text-sm font-semibold text-gray-800">{{getFullName(user)}}</p>
                     <p class="text-xs text-gray-500">@{{user.username}}</p>
                   </div>
                 </div>
@@ -144,10 +144,10 @@
               <td class="px-4 py-2.5 text-sm text-gray-700">{{user.createdAt | date:'short'}}</td>
               <td pFrozenColumn [frozen]="true" alignFrozen="right" class="px-4 py-2.5 text-center" style="width: 140px;">
                 <div class="flex items-center justify-center space-x-1.5">
-                  <button class="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="Edit">
+                  <button (click)="editUser(user.userId)" class="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="Edit">
                     <i class="pi pi-pencil text-sm"></i>
                   </button>
-                  <button class="p-1.5 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors" title="View">
+                  <button (click)="viewUser(user.userId)" class="p-1.5 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors" title="View">
                     <i class="pi pi-eye text-sm"></i>
                   </button>
                   <button (click)="deleteUser(user.userId)" class="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Delete">

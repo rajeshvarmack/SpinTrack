@@ -1,12 +1,12 @@
-<div class="space-y-6">
+<div class="px-4 py-3 sm:px-6">
   <!-- Page Header -->
-  <div class="flex items-center justify-between">
+  <div class="flex items-center justify-between mb-3">
     <div>
-      <h1 class="text-3xl font-bold text-gray-800">Permission Management</h1>
-      <p class="text-gray-600 mt-1">Configure access permissions for different modules</p>
+      <h1 class="text-xl font-bold text-gray-800">Permission Management</h1>
+      <p class="text-xs text-gray-600">Configure access permissions for different modules</p>
     </div>
-    <button class="px-4 py-2 bg-warning-600 text-white rounded-lg hover:bg-warning-700 transition-colors shadow-md hover:shadow-lg flex items-center">
-      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <button class="px-3 py-2 bg-warning-600 text-white rounded-lg hover:bg-warning-700 transition-colors shadow-sm hover:shadow-md flex items-center text-sm">
+      <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
       </svg>
       Add Permission
@@ -14,8 +14,8 @@
   </div>
 
   <!-- Stats Overview -->
-  <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-    <div class="bg-white rounded-xl shadow-md p-6 border border-gray-100">
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-3">
+    <div class="bg-white rounded-lg shadow-sm p-4 border border-gray-100">
       <div class="flex items-center justify-between">
         <div>
           <p class="text-gray-500 text-sm font-medium">Total Permissions</p>
@@ -29,7 +29,7 @@
       </div>
     </div>
 
-    <div class="bg-white rounded-xl shadow-md p-6 border border-gray-100">
+    <div class="bg-white rounded-lg shadow-sm p-4 border border-gray-100">
       <div class="flex items-center justify-between">
         <div>
           <p class="text-gray-500 text-sm font-medium">Modules</p>
@@ -43,7 +43,7 @@
       </div>
     </div>
 
-    <div class="bg-white rounded-xl shadow-md p-6 border border-gray-100">
+    <div class="bg-white rounded-lg shadow-sm p-4 border border-gray-100">
       <div class="flex items-center justify-between">
         <div>
           <p class="text-gray-500 text-sm font-medium">Read Permissions</p>
@@ -58,7 +58,7 @@
       </div>
     </div>
 
-    <div class="bg-white rounded-xl shadow-md p-6 border border-gray-100">
+    <div class="bg-white rounded-lg shadow-sm p-4 border border-gray-100">
       <div class="flex items-center justify-between">
         <div>
           <p class="text-gray-500 text-sm font-medium">Write Permissions</p>
@@ -75,16 +75,16 @@
 
   <!-- Loading State -->
   @if (loading()) {
-    <div class="flex items-center justify-center h-64 bg-white rounded-xl shadow-md">
+    <div class="flex items-center justify-center h-64 bg-white rounded-lg shadow-sm mb-3">
       <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-warning-600"></div>
     </div>
   }
 
   <!-- Permissions by Module -->
   @if (!loading()) {
-    <div class="space-y-6">
+    <div class="space-y-3">
       @for (entry of getGroupedPermissionsArray(); track entry[0]) {
-        <div class="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
           <!-- Module Header -->
           <div class="bg-gradient-to-r from-primary-50 to-secondary-50 px-6 py-4 border-b border-gray-200">
             <div class="flex items-center justify-between">

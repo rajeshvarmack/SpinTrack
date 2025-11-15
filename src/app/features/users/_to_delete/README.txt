@@ -1,0 +1,1 @@
+This folder contains components marked for deletion as part of workspace cleanup and refactoring. Safe to remove after migration.

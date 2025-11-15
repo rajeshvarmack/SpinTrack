@@ -1,0 +1,30 @@
+<!-- User View Component Template -->
+<div class="user-view-container bg-white rounded-xl shadow p-8 max-w-2xl mx-auto mt-8">
+  <div class="flex items-center gap-6 mb-6">
+    <div class="avatar w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center text-3xl text-gray-400">
+      <span class="material-icons">person</span>
+    </div>
+    <div>
+      <h2 class="text-xl font-bold">{{ fullName() }}</h2>
+      <p class="text-sm text-gray-500">{{ user()?.username }}</p>
+      <span class="inline-block mt-2 px-3 py-1 rounded-full text-xs font-semibold"
+        [class]="statusClass()">
+        {{ user()?.status }}
+      </span>
+    </div>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+    <div>
+      <label class="block text-xs text-gray-500 mb-1">Email</label>
+      <div class="font-medium">{{ user()?.email }}</div>
+    </div>
+    <div>
+      <label class="block text-xs text-gray-500 mb-1">Phone</label>
+      <div class="font-medium">{{ user()?.phoneNumber }}</div>
+    </div>
+    <div>
+      <label class="block text-xs text-gray-500 mb-1">Created At</label>
+      <div class="font-medium">{{ user()?.createdAt | date:'mediumDate' }}</div>
+    </div>
+  </div>
+</div>

@@ -1,6 +1,8 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
 import { providePrimeNG } from 'primeng/config';
+import { MessageService, ConfirmationService } from 'primeng/api';
 import { provideEchartsCore } from 'ngx-echarts';
 import * as echarts from 'echarts/core';
 import { LineChart, PieChart, BarChart } from 'echarts/charts';
@@ -30,6 +32,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }), 
     provideRouter(routes),
+    provideAnimations(),
     provideEchartsCore({ echarts }),
     providePrimeNG({
       theme: {
@@ -39,5 +42,8 @@ export const appConfig: ApplicationConfig = {
         }
       }
     })
+    ,
+    MessageService,
+    ConfirmationService
   ]
 };

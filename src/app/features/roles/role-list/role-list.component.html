@@ -1,21 +1,29 @@
-<div class="space-y-6">
+<div class="px-4 py-3 sm:px-6">
   <!-- Page Header -->
-  <div class="flex items-center justify-between">
+  <div class="flex items-center justify-between mb-3">
     <div>
-      <h1 class="text-3xl font-bold text-gray-800">Role Management</h1>
-      <p class="text-gray-600 mt-1">Define and manage user roles and access levels</p>
+      <h1 class="text-xl font-bold text-gray-800">Role Management</h1>
+      <p class="text-xs text-gray-600">Define and manage user roles and access levels</p>
     </div>
-    <button class="px-4 py-2 bg-secondary-600 text-white rounded-lg hover:bg-secondary-700 transition-colors shadow-md hover:shadow-lg flex items-center">
-      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-      </svg>
-      Add New Role
-    </button>
+    <div class="flex items-center gap-2">
+      <button class="px-3 py-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-lg hover:from-emerald-600 hover:to-teal-700 transition-all shadow-sm hover:shadow-md flex items-center text-sm">
+        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+        </svg>
+        Export
+      </button>
+      <button class="px-3 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors shadow-sm hover:shadow-md flex items-center text-sm">
+        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+        </svg>
+        Add New Role
+      </button>
+    </div>
   </div>
 
   <!-- Stats Overview -->
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-    <div class="bg-white rounded-xl shadow-md p-6 border border-gray-100">
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
+    <div class="bg-white rounded-lg shadow-sm p-4 border border-gray-100">
       <div class="flex items-center justify-between">
         <div>
           <p class="text-gray-500 text-sm font-medium">Total Roles</p>
@@ -29,7 +37,7 @@
       </div>
     </div>
 
-    <div class="bg-white rounded-xl shadow-md p-6 border border-gray-100">
+    <div class="bg-white rounded-lg shadow-sm p-4 border border-gray-100">
       <div class="flex items-center justify-between">
         <div>
           <p class="text-gray-500 text-sm font-medium">Admin Roles</p>
@@ -43,7 +51,7 @@
       </div>
     </div>
 
-    <div class="bg-white rounded-xl shadow-md p-6 border border-gray-100">
+    <div class="bg-white rounded-lg shadow-sm p-4 border border-gray-100">
       <div class="flex items-center justify-between">
         <div>
           <p class="text-gray-500 text-sm font-medium">User Roles</p>
@@ -60,16 +68,16 @@
 
   <!-- Loading State -->
   @if (loading()) {
-    <div class="flex items-center justify-center h-64 bg-white rounded-xl shadow-md">
+    <div class="flex items-center justify-center h-64 bg-white rounded-lg shadow-sm mb-3">
       <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-secondary-600"></div>
     </div>
   }
 
   <!-- Roles Grid -->
   @if (!loading()) {
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
       @for (role of roles(); track role.roleId) {
-        <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden group">
+        <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 overflow-hidden group">
           <!-- Card Header -->
           <div class="bg-gradient-to-r from-secondary-50 to-primary-50 px-6 py-4 border-b border-gray-200">
         <div class="flex items-start justify-between">

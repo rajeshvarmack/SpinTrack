@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { PrimeNgTableModule } from '../../../shared/modules/primeng-table.module';
 import { UserService } from '../../../core/services/user.service';
-import { DashboardStats } from '../../../core/models/user.model';
+import { DashboardStats } from '../models/dashboard.model';
 import { EChartsOption } from 'echarts';
 
 @Component({

@@ -1,7 +1,8 @@
 import { Component, OnInit, signal, computed, inject, ChangeDetectionStrategy, PLATFORM_ID, effect } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Router } from '@angular/router';
 import { UserService } from '../../../core/services/user.service';
-import { User } from '../../../core/models/user.model';
+import { User } from '../models/user.model';
 import { PrimeNgTableModule } from '../../../shared/modules/primeng-table.module';
 
 @Component({
@@ -14,6 +15,7 @@ import { PrimeNgTableModule } from '../../../shared/modules/primeng-table.module
 export class UserListComponent implements OnInit {
   private userService = inject(UserService);
   private platformId = inject(PLATFORM_ID);
+  private router = inject(Router);
   
   users = signal<User[]>([]);
   loading = signal(true);
@@ -34,11 +36,12 @@ export class UserListComponent implements OnInit {
     const term = this.searchTerm().toLowerCase();
     const usersArr = this.users() ?? [];
     if (!term) return usersArr;
-    return usersArr.filter((user: User) =>
-      user.fullName.toLowerCase().includes(term) ||
-      user.email.toLowerCase().includes(term) ||
-      user.username.toLowerCase().includes(term)
-    );
+    return usersArr.filter((user: User) => {
+      const fullName = this.getFullName(user).toLowerCase();
+      return fullName.includes(term) ||
+        user.email.toLowerCase().includes(term) ||
+        user.username.toLowerCase().includes(term);
+    });
   });
 
   allUsersCount = computed(() => (this.users() ?? []).length);
@@ -97,8 +100,15 @@ export class UserListComponent implements OnInit {
     this.searchTerm.set(target.value);
   }
 
-  getInitials(fullName: string): string {
-    return fullName.split(' ').map(n => n[0]).join('').toUpperCase();
+  getFullName(user: User): string {
+    const parts = [user.firstName, user.middleName, user.lastName].filter(Boolean);
+    return parts.join(' ');
+  }
+
+  getInitials(user: User): string {
+    const first = user.firstName?.[0] || '';
+    const last = user.lastName?.[0] || '';
+    return (first + last).toUpperCase();
   }
 
   getAvatarColor(userId: string): string {
@@ -136,5 +146,17 @@ export class UserListComponent implements OnInit {
         error: (err) => console.error('Error deleting user:', err)
       });
     }
+  }
+
+  addNewUser(): void {
+    this.router.navigate(['/users/add']);
+  }
+
+  viewUser(userId: string): void {
+    this.router.navigate(['/users', userId]);
+  }
+
+  editUser(userId: string): void {
+    this.router.navigate(['/users', userId]);
   }
 }

@@ -1,0 +1,120 @@
+<!-- User Edit Component Template -->
+<div class="px-4 py-3 sm:px-6">
+  <!-- Page Header -->
+  <div class="flex items-center justify-between mb-3">
+    <div>
+      <h1 class="text-xl font-bold text-gray-800">{{ mode() === 'add' ? 'Add New User' : 'Edit User' }}</h1>
+      <p class="text-xs text-gray-600">{{ mode() === 'add' ? 'Create a new user account with the appropriate permissions' : 'Update user details and permissions' }}</p>
+    </div>
+    <div>
+      <button (click)="goBack()" class="px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition-colors flex items-center">
+        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+        Back to User List
+      </button>
+    </div>
+  </div>
+
+  <!-- Form Card -->
+  <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-6">
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()" autocomplete="off">
+    <div class="flex flex-col md:flex-row gap-8 mb-6">
+      <div class="md:w-1/4">
+        <label class="upload-zone block">
+          <div class="upload-inner flex items-center justify-center flex-col p-3 rounded-lg border-2 border-dashed border-gray-200 hover:border-primary-500 transition-colors cursor-pointer"
+               (drop)="$event.preventDefault(); onDrop($event)" (dragover)="$event.preventDefault(); onDragOver($event)">
+            @if (avatarPreview()) {
+              <img [src]="avatarPreview()" alt="Avatar" class="w-32 h-32 rounded-full object-cover mb-3 shadow-sm" />
+            } @else {
+              <svg class="w-12 h-12 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+              </svg>
+              <div class="text-sm text-gray-600">Drag & drop a photo or</div>
+              <div class="text-sm font-medium text-primary-600 mt-1">Click to upload</div>
+            }
+          </div>
+          <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" class="sr-only" />
+        </label>
+        <div class="flex items-center justify-center gap-3 mt-3">
+          <button type="button" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium" (click)="fileInput.click()">
+            Upload
+          </button>
+          <button *ngIf="avatarPreview()" type="button" class="px-4 py-2 text-sm rounded-lg border border-red-200 text-red-600 hover:bg-red-50" (click)="avatarPreview.set(null)">
+            Remove
+          </button>
+        </div>
+        <p class="text-xs text-gray-500 mt-2 text-center">JPG, PNG or GIF • Max size: 2MB</p>
+      </div>
+      <div class="md:w-3/4 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Username *</label>
+          <input type="text" class="input w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm" formControlName="username" placeholder="Enter username" />
+          @if (userForm.get('username')?.invalid && userForm.get('username')?.touched) {
+            <span class="text-xs text-red-600 mt-1 block">Username is required (min 3 characters)</span>
+          }
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+          <input type="email" class="input w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm" formControlName="email" placeholder="user@example.com" />
+          @if (userForm.get('email')?.invalid && userForm.get('email')?.touched) {
+            <span class="text-xs text-red-600 mt-1 block">Valid email is required</span>
+          }
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">First Name *</label>
+          <input type="text" class="input w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm" formControlName="firstName" placeholder="Enter first name" />
+          @if (userForm.get('firstName')?.invalid && userForm.get('firstName')?.touched) {
+            <span class="text-xs text-red-600 mt-1 block">First name is required</span>
+          }
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Middle Name</label>
+          <input type="text" class="input w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm" formControlName="middleName" placeholder="Enter middle name (optional)" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+          <input type="text" class="input w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm" formControlName="lastName" placeholder="Enter last name" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+          <input type="text" class="input w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm" formControlName="phoneNumber" placeholder="+971 XX XXX XXXX" />
+        </div>
+        @if (mode() === 'add') {
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Password *</label>
+            <input type="password" class="input w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm" formControlName="password" placeholder="Enter password (min 6 characters)" />
+            @if (userForm.get('password')?.invalid && userForm.get('password')?.touched) {
+              <span class="text-xs text-red-600 mt-1 block">Password is required (min 6 characters)</span>
+            }
+          </div>
+        }
+      </div>
+    </div>
+    
+    <div class="border-t border-gray-200 pt-4 mt-6">
+      <div class="bg-gray-50 rounded-lg p-4 mb-6">
+        <label class="flex items-center gap-3 cursor-pointer">
+          <input type="checkbox" formControlName="status" [checked]="userForm.get('status')?.value === 'Active'" 
+                 (change)="userForm.patchValue({ status: $any($event.target).checked ? 'Active' : 'Inactive' })" 
+                 class="w-4 h-4 text-primary-600 rounded focus:ring-2 focus:ring-primary-500" />
+          <div>
+            <span class="font-semibold text-gray-900">Active Account</span>
+            <p class="text-xs text-gray-600 mt-0.5">Enable this account for immediate access to the system</p>
+          </div>
+        </label>
+      </div>
+      
+      <div class="flex gap-3 justify-end">
+        <button type="button" class="px-5 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors shadow-sm font-medium text-sm" (click)="onCancel()">
+          Cancel
+        </button>
+        <button type="submit" [disabled]="userForm.invalid" 
+                class="px-5 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed font-medium text-sm">
+          {{ mode() === 'add' ? 'Create User' : 'Save Changes' }}
+        </button>
+      </div>
+    </div>
+  </form>
+  </div>
+</div>

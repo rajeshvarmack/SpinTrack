@@ -1,0 +1,28 @@
+/* User Edit Component Styles */
+.input:focus {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Upload zone */
+.upload-zone .upload-inner {
+  min-height: 120px;
+  display: flex;
+}
+.upload-zone .upload-inner img {
+  border-radius: 9999px;
+}
+.upload-zone .upload-inner:hover {
+  background: rgba(99,102,241,0.02);
+}
+.upload-zone .upload-inner:focus {
+  outline: none;
+}
+
+/* Buttons */
+.btn-primary {
+  background-color: #0f172a; /* dark navy to match theme */
+  color: #fff;
+}
+.btn-primary:hover {
+  background-color: #0b1220;
+}

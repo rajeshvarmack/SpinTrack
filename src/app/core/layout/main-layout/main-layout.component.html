@@ -38,7 +38,7 @@
   </div>
 
   <!-- Navigation -->
-  <nav class="mt-8 transition-all duration-300"
+  <nav class="mt-4 transition-all duration-300"
        [class.px-4]="sidebarOpen()"
        [class.px-2]="!sidebarOpen()">
 
@@ -46,24 +46,20 @@
 
       <!-- Dashboard Menu Item -->
       <a routerLink="/dashboard" 
-         [class.bg-gradient-to-r]="isDashboardRoute()"
-         [class.from-cyan-500/40]="isDashboardRoute()"
-         [class.to-blue-500/40]="isDashboardRoute()"
-         [class.text-cyan-300]="isDashboardRoute()"
-         [class.border-l-4]="isDashboardRoute()"
-         [class.border-cyan-400]="isDashboardRoute()"
-         [class.shadow-lg]="isDashboardRoute()"
-         [class.hover\:bg-slate-700/40]="!isDashboardRoute()"
-         [class.text-slate-300]="!isDashboardRoute()"
+        [class.bg-slate-700/60]="isDashboardRoute()"
+        [class.text-cyan-300]="isDashboardRoute()"
+        [class.font-medium]="isDashboardRoute()"
+        [class.hover\:bg-slate-700/40]="!isDashboardRoute()"
+        [class.text-slate-300]="!isDashboardRoute()"
          (mouseenter)="setHoveredMenu('dashboard')"
          (mouseleave)="setHoveredMenu(null)"
-         class="group relative flex items-center rounded-r-lg transition-all duration-200 font-medium"
+         class="group relative flex items-center rounded-r-lg transition-all duration-200 text-sm"
          [class.px-4]="sidebarOpen()"
          [class.px-3]="!sidebarOpen()"
-         [class.py-4.5]="sidebarOpen()"
-         [class.py-5]="!sidebarOpen()"
+         [class.py-2]="sidebarOpen()"
+         [class.py-4]="!sidebarOpen()"
          [class.justify-center]="!sidebarOpen()">
-        <svg class="w-5 h-5 transition-all duration-200" 
+        <svg class="w-4 h-4 transition-all duration-200" 
              [class.mr-3]="sidebarOpen()" 
              fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -82,37 +78,23 @@
         }
       </a>
 
-      <!-- Spacer -->
-      <div class="h-4"></div>
-
-      <!-- Admin Section Label (only when expanded) -->
-      @if (sidebarOpen()) {
-        <div class="px-4 py-2 text-xs font-semibold text-slate-400 uppercase tracking-wider">
-          Administration
-        </div>
-      }
-
       <!-- Admin Menu Item with Submenu -->
       <div class="relative"
            (mouseenter)="setHoveredMenu('admin')">
         <button
           (click)="toggleAdminMenu()"
-          [class.bg-gradient-to-r]="isAdminRoute()"
-          [class.from-cyan-500/40]="isAdminRoute()"
-          [class.to-blue-500/40]="isAdminRoute()"
+          [class.bg-slate-700/60]="isAdminRoute()"
           [class.text-cyan-300]="isAdminRoute()"
-          [class.border-l-4]="isAdminRoute()"
-          [class.border-cyan-400]="isAdminRoute()"
-          [class.shadow-lg]="isAdminRoute()"
+          [class.font-medium]="isAdminRoute()"
           [class.hover\:bg-slate-700/40]="!isAdminRoute()"
           [class.text-slate-300]="!isAdminRoute()"
-          class="group w-full relative flex items-center rounded-r-lg transition-all duration-200 font-medium"
+          class="group w-full relative flex items-center rounded-r-lg transition-all duration-200 text-sm"
           [class.px-4]="sidebarOpen()"
           [class.px-3]="!sidebarOpen()"
-          [class.py-4.5]="sidebarOpen()"
-          [class.py-5]="!sidebarOpen()"
+          [class.py-2]="sidebarOpen()"
+          [class.py-4]="!sidebarOpen()"
           [class.justify-center]="!sidebarOpen()">
-          <svg class="w-5 h-5 transition-all duration-200" 
+          <svg class="w-4 h-4 transition-all duration-200" 
                [class.mr-3]="sidebarOpen()" 
                fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -132,10 +114,10 @@
 
         <!-- Submenu for expanded sidebar -->
         @if (sidebarOpen() && adminExpanded()) {
-          <div class="mt-2 ml-4 space-y-1.5 border-l-2 border-slate-500/40 pl-5 animate-fadeIn">
+          <div class="mt-1 ml-4 space-y-1 border-l-2 border-slate-500/40 pl-4 animate-fadeIn">
             <a routerLink="/users" 
                routerLinkActive="bg-slate-700/60 text-cyan-300 font-medium"
-               class="flex items-center px-3 py-2.5 text-slate-400 rounded-md hover:bg-slate-700/40 hover:text-slate-200 transition-all duration-150 text-sm group">
+               class="flex items-center px-2 py-1.5 text-white rounded-md hover:bg-slate-700/40 hover:text-slate-200 transition-all duration-150 text-xs group">
               <svg class="w-4 h-4 mr-3 opacity-70 group-hover:opacity-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
@@ -144,7 +126,7 @@
             </a>
             <a routerLink="/roles" 
                routerLinkActive="bg-slate-700/60 text-cyan-300 font-medium"
-               class="flex items-center px-3 py-2.5 text-slate-400 rounded-md hover:bg-slate-700/40 hover:text-slate-200 transition-all duration-150 text-sm group">
+               class="flex items-center px-2 py-1.5 text-white rounded-md hover:bg-slate-700/40 hover:text-slate-200 transition-all duration-150 text-xs group">
               <svg class="w-4 h-4 mr-3 opacity-70 group-hover:opacity-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
@@ -153,7 +135,7 @@
             </a>
             <a routerLink="/modules" 
                routerLinkActive="bg-slate-700/60 text-cyan-300 font-medium"
-               class="flex items-center px-3 py-2.5 text-slate-400 rounded-md hover:bg-slate-700/40 hover:text-slate-200 transition-all duration-150 text-sm group">
+               class="flex items-center px-2 py-1.5 text-white rounded-md hover:bg-slate-700/40 hover:text-slate-200 transition-all duration-150 text-xs group">
               <svg class="w-4 h-4 mr-3 opacity-60 group-hover:opacity-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
@@ -162,7 +144,7 @@
             </a>
             <a routerLink="/sub-modules" 
                routerLinkActive="bg-slate-700/60 text-cyan-300 font-medium"
-               class="flex items-center px-3 py-2.5 text-slate-400 rounded-md hover:bg-slate-700/40 hover:text-slate-200 transition-all duration-150 text-sm group">
+               class="flex items-center px-2 py-1.5 text-white rounded-md hover:bg-slate-700/40 hover:text-slate-200 transition-all duration-150 text-xs group">
               <svg class="w-4 h-4 mr-3 opacity-70 group-hover:opacity-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>
@@ -171,7 +153,7 @@
             </a>
             <a routerLink="/permissions" 
                routerLinkActive="bg-slate-700/60 text-cyan-300 font-medium"
-               class="flex items-center px-3 py-2.5 text-slate-400 rounded-md hover:bg-slate-700/40 hover:text-slate-200 transition-all duration-150 text-sm group">
+               class="flex items-center px-2 py-1.5 text-white rounded-md hover:bg-slate-700/40 hover:text-slate-200 transition-all duration-150 text-xs group">
               <svg class="w-4 h-4 mr-3 opacity-70 group-hover:opacity-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1721 9z"/>

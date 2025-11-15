@@ -1,0 +1,10 @@
+/* User View Component Styles */
+.user-view-container {
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+}
+.avatar {
+  background: #f3f4f6;
+  color: #9ca3af;
+}

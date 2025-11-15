@@ -1,7 +1,7 @@
 import { Component, OnInit, signal, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RoleService } from '../../../core/services/role.service';
-import { Role } from '../../../core/models/user.model';
+import { Role } from '../models/role.model';
 
 @Component({
   selector: 'app-role-list',

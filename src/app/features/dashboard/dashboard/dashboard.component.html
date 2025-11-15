@@ -1,18 +1,11 @@
-<div class="space-y-6">
+<div class="px-4 py-3 sm:px-6">  
   <!-- Page Header -->
-  <div class="flex items-center justify-between">
+  <div class="flex items-center justify-between mb-3">
     <div>
-      <h1 class="text-3xl font-bold text-gray-800">Admin Dashboard</h1>
-      <p class="text-gray-600 mt-1">Welcome back! Here's what's happening today.</p>
-    </div>
-    <button class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors shadow-md hover:shadow-lg">
-      <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-      </svg>
-      Quick Action
-    </button>
+      <h1 class="text-xl font-bold text-gray-800">Admin Dashboard</h1>
+      <p class="text-xs text-gray-600">Welcome back! Here's what's happening today.</p>
+    </div>    
   </div>
-
   <!-- Loading State -->
   @if (loading()) {
     <div class="flex items-center justify-center h-64">
@@ -22,10 +15,10 @@
 
   <!-- Stats Cards -->
   @if (!loading() && stats()) {
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 mb-3">
       <!-- Total Users Card -->
-      <div class="bg-gradient-to-br from-[#001f5c] to-[#0039a6] rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden">
-        <div class="p-6">
+      <div class="bg-gradient-to-br from-[#001f5c] to-[#0039a6] rounded-lg shadow-sm overflow-hidden">
+        <div class="p-4">
           <div class="flex items-center justify-between mb-4">
             <h3 class="text-white text-sm font-medium">Total Users</h3>
             <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
@@ -40,8 +33,8 @@
       </div>
 
       <!-- Active Users Card -->
-      <div class="bg-gradient-to-br from-[#00b894] to-[#00a080] rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden">
-        <div class="p-6">
+      <div class="bg-gradient-to-br from-[#00b894] to-[#00a080] rounded-lg shadow-sm overflow-hidden">
+        <div class="p-4">
           <div class="flex items-center justify-between mb-4">
             <h3 class="text-white text-sm font-medium">Active Users</h3>
             <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
@@ -56,8 +49,8 @@
       </div>
 
       <!-- Total Roles Card -->
-      <div class="bg-gradient-to-br from-[#6c5ce7] to-[#5f4dc4] rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden">
-        <div class="p-6">
+      <div class="bg-gradient-to-br from-[#6c5ce7] to-[#5f4dc4] rounded-lg shadow-sm overflow-hidden">
+        <div class="p-4">
           <div class="flex items-center justify-between mb-4">
             <h3 class="text-white text-sm font-medium">Total Roles</h3>
             <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
@@ -72,8 +65,8 @@
       </div>
 
       <!-- Total Modules Card -->
-      <div class="bg-gradient-to-br from-[#f39c12] to-[#e67e22] rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden">
-        <div class="p-6">
+      <div class="bg-gradient-to-br from-[#f39c12] to-[#e67e22] rounded-lg shadow-sm overflow-hidden">
+        <div class="p-4">
           <div class="flex items-center justify-between mb-4">
             <h3 class="text-white text-sm font-medium">Total Modules</h3>
             <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
@@ -88,8 +81,8 @@
       </div>
 
       <!-- Total Sub Modules Card -->
-      <div class="bg-gradient-to-br from-[#e74c3c] to-[#c0392b] rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden">
-        <div class="p-6">
+      <div class="bg-gradient-to-br from-[#e74c3c] to-[#c0392b] rounded-lg shadow-sm overflow-hidden">
+        <div class="p-4">
           <div class="flex items-center justify-between mb-4">
             <h3 class="text-white text-sm font-medium">Total Sub Modules</h3>
             <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
@@ -104,8 +97,8 @@
       </div>
 
       <!-- Total Permissions Card -->
-      <div class="bg-gradient-to-br from-[#00b4d8] to-[#0096c7] rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden">
-        <div class="p-6">
+      <div class="bg-gradient-to-br from-[#00b4d8] to-[#0096c7] rounded-lg shadow-sm overflow-hidden">
+        <div class="p-4">
           <div class="flex items-center justify-between mb-4">
             <h3 class="text-white text-sm font-medium">Total Permissions</h3>
             <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
@@ -123,7 +116,7 @@
 
   <!-- Recent Users Section -->
   @if (!loading() && stats()) {
-    <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden mb-3">
       <!-- Card Header -->
       <div class="px-6 py-5 border-b border-gray-100">
         <div class="flex items-start justify-between">
@@ -232,10 +225,10 @@
 
   <!-- Analytics Section - Charts Row 1 -->
   @if (!loading() && stats()) {
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 mb-3">
       
       <!-- User Growth Chart -->
-      <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+      <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
         <div class="px-6 py-4 border-b border-gray-100">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-3">
@@ -258,7 +251,7 @@
       </div>
 
       <!-- User Status Distribution -->
-      <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+      <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
         <div class="px-6 py-4 border-b border-gray-100">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-3">
@@ -284,10 +277,10 @@
 
   <!-- Analytics Section - Charts Row 2 -->
   @if (!loading() && stats()) {
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-3">
       
       <!-- Role Distribution Chart -->
-      <div class="lg:col-span-2 bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+      <div class="lg:col-span-2 bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
         <div class="px-6 py-4 border-b border-gray-100">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-3">
@@ -309,7 +302,7 @@
       </div>
 
       <!-- Quick Stats Card -->
-      <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+      <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
         <div class="px-6 py-4 border-b border-gray-100">
           <h3 class="text-lg font-bold text-gray-900">Quick Stats</h3>
           <p class="text-xs text-gray-500">System overview</p>
