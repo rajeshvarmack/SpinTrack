@@ -29,6 +29,14 @@ export class MainLayoutComponent {
            url.includes('/modules') || url.includes('/sub-modules');
   });
 
+  // Only treat Admin as "active" when the explicit /admin route is navigated to.
+  // This keeps submenu child-route detection (isAdminRoute) for expanding the menu,
+  // but prevents the top-level Admin button from being highlighted when a submenu is active.
+  isAdminActive = computed(() => {
+    const url = this.currentRoute();
+    return url === '/admin';
+  });
+
   // Check if current route is dashboard
   isDashboardRoute = computed(() => {
     const url = this.currentRoute();

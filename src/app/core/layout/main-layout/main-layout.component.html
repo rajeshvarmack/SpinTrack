@@ -17,13 +17,15 @@
 >
 
   <!-- Logo -->
-  <div class="flex items-center h-16 border-b-[3px] border-white/30 transition-all duration-300 w-full"
-       [class.justify-start]="sidebarOpen()"
-       [class.justify-center]="!sidebarOpen()">
-    <div class="flex items-center transition-all duration-300"
-         [class.px-6]="sidebarOpen()"
-         [class.px-4]="!sidebarOpen()"
-         [class.space-x-3]="sidebarOpen()">
+    <div class="flex items-center h-16 transition-all duration-300 w-full border-b border-slate-700/20"
+        [class.justify-start]="sidebarOpen()"
+        [class.justify-center]="!sidebarOpen()">
+      <div class="flex items-center transition-all duration-300"
+           [class.px-6]="sidebarOpen()"
+           [class.px-4]="!sidebarOpen()"
+           [class.space-x-4]="sidebarOpen()"
+           [class.py-3]="sidebarOpen()"
+           [class.py-2]="!sidebarOpen()">
       <div class="w-12 h-12 bg-gradient-to-br from-blue-500 via-cyan-400 to-teal-400 rounded-xl flex items-center justify-center shadow-lg transition-all duration-300"
            [class.scale-90]="!sidebarOpen()">
         <span class="text-white font-bold text-xl">ST</span>
@@ -83,11 +85,11 @@
            (mouseenter)="setHoveredMenu('admin')">
         <button
           (click)="toggleAdminMenu()"
-          [class.bg-slate-700/60]="isAdminRoute()"
-          [class.text-cyan-300]="isAdminRoute()"
-          [class.font-medium]="isAdminRoute()"
-          [class.hover\:bg-slate-700/40]="!isAdminRoute()"
-          [class.text-slate-300]="!isAdminRoute()"
+          [class.bg-slate-700/60]="isAdminActive()"
+          [class.text-cyan-300]="isAdminActive()"
+          [class.font-medium]="isAdminActive()"
+          [class.hover\:bg-slate-700/40]="!isAdminActive()"
+          [class.text-slate-300]="!isAdminActive()"
           class="group w-full relative flex items-center rounded-r-lg transition-all duration-200 text-sm"
           [class.px-4]="sidebarOpen()"
           [class.px-3]="!sidebarOpen()"
@@ -234,12 +236,12 @@
 >
 
   <!-- Header -->
-  <header class="bg-gradient-to-r from-[#14234A] to-[#3B1663] shadow-lg sticky top-0 z-20">
-    <div class="flex items-center justify-between h-16 px-4 sm:px-6 border-b-[3px] border-white/30">
+  <header class="sticky top-0 z-20 bg-transparent">
+    <div class="flex items-center justify-between h-16 px-4 sm:px-6 border-b-[3px] border-slate-200/30">
 
       <!-- Toggle Button -->
-      <button (click)="toggleSidebar()"
-              class="p-2 rounded-lg bg-slate-700/60 hover:bg-slate-700 text-cyan-400 transition focus:outline-none focus:ring-2 focus:ring-cyan-400/50"
+            <button (click)="toggleSidebar()"
+              class="p-2 rounded-lg bg-transparent hover:bg-slate-100 text-slate-700 transition focus:outline-none focus:ring-2 focus:ring-slate-300/50"
               aria-label="Toggle sidebar">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -250,11 +252,11 @@
       <!-- Search - Hidden on mobile, visible on md+ -->
       <div class="hidden md:flex flex-1 px-4 lg:px-6">
         <div class="relative max-w-lg mx-auto w-full">
-          <input type="text"
-                 class="w-full pl-10 pr-4 py-2 bg-slate-700/50 border border-slate-600
-                        text-white placeholder-slate-400 rounded-lg focus:outline-none
-                        focus:ring-2 focus:ring-cyan-400/50 transition"
-                 placeholder="Search...">
+             <input type="text"
+               class="w-full pl-10 pr-4 py-2 bg-white border border-slate-200
+                 text-slate-700 placeholder-slate-400 rounded-lg focus:outline-none
+                 focus:ring-2 focus:ring-cyan-400/25 transition"
+               placeholder="Search...">
           <svg class="absolute left-3 top-2.5 w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
@@ -266,8 +268,8 @@
       <div class="flex items-center space-x-2 sm:space-x-4">
 
         <!-- Notifications -->
-        <button class="relative p-2 text-slate-300 hover:bg-slate-700 rounded-lg transition focus:outline-none focus:ring-2 focus:ring-cyan-400/50"
-                aria-label="Notifications">
+        <button class="relative p-2 text-slate-700 hover:bg-slate-100 rounded-lg transition focus:outline-none focus:ring-2 focus:ring-cyan-400/20"
+          aria-label="Notifications">
           <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
@@ -278,8 +280,8 @@
         <!-- User - Text hidden on small screens -->
         <div class="flex items-center space-x-2 sm:space-x-3 pl-2 sm:pl-4 border-l border-slate-600/40">
           <div class="text-right hidden sm:block">
-            <p class="text-sm font-semibold text-white">Admin User</p>
-            <p class="text-xs text-slate-400">Super Admin</p>
+            <p class="text-sm font-semibold text-slate-800">Admin User</p>
+            <p class="text-xs text-slate-600">Super Admin</p>
           </div>
           <div class="w-9 h-9 sm:w-10 sm:h-10 bg-gradient-to-br from-blue-500 via-cyan-400 to-teal-400
                       rounded-full flex items-center justify-center text-white font-bold text-sm">
