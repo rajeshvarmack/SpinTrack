@@ -1,7 +1,10 @@
 import { Component, ChangeDetectionStrategy, input, output, effect, signal, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { DatePicker } from 'primeng/datepicker';
+import { ToggleSwitch } from 'primeng/toggleswitch';
 import { User } from '../models/user.model';
 import { NotificationService } from '../../../core/services/notification.service';
 import { ConfirmationService } from 'primeng/api';
@@ -12,7 +15,7 @@ import { CanComponentDeactivate } from '../../../core/guards/unsaved-changes.gua
   templateUrl: './user-edit.component.html',
   styleUrls: ['./user-edit.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, ReactiveFormsModule]
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, NgSelectModule, DatePicker, ToggleSwitch]
 })
 export class UserEditComponent {
   user = input<User | null>(null);
@@ -23,6 +26,17 @@ export class UserEditComponent {
   private fb = new FormBuilder();
   userForm: FormGroup;
   avatarPreview = signal<string | null>(null);
+  genders = [
+    { label: 'Male', value: 'male' },
+    { label: 'Female', value: 'female' },
+    { label: 'Other', value: 'other' }
+  ];
+  nationalities = [
+    { label: 'UAE', value: 'UAE' },
+    { label: 'India', value: 'India' },
+    { label: 'United States', value: 'USA' },
+    { label: 'Other', value: 'Other' }
+  ];
   private router = inject(Router);
   private notification = inject(NotificationService);
   private confirmation = inject(ConfirmationService);
@@ -37,20 +51,29 @@ export class UserEditComponent {
       lastName: [''],
       phoneNumber: [''],
       password: [''],
-      status: ['Active']
-    });
+      confirmPassword: [''],
+      nationalId: [''],
+      gender: [''],
+      dob: [null],
+      nationality: [''],
+      status: [true]
+    }, { validators: this.passwordsMatchValidator });
 
     // Set password as required only for 'add' mode
     effect(() => {
       const currentMode = this.mode();
       const passwordControl = this.userForm.get('password');
+      const confirmControl = this.userForm.get('confirmPassword');
       
       if (currentMode === 'add') {
         passwordControl?.setValidators([Validators.required, Validators.minLength(6)]);
+        confirmControl?.setValidators([Validators.required]);
       } else {
         passwordControl?.clearValidators();
+        confirmControl?.clearValidators();
       }
       passwordControl?.updateValueAndValidity();
+      confirmControl?.updateValueAndValidity();
     });
 
     // Populate form when user input changes
@@ -65,14 +88,15 @@ export class UserEditComponent {
           middleName: currentUser.middleName || '',
           lastName: currentUser.lastName || '',
           phoneNumber: currentUser.phoneNumber || '',
-          status: currentUser.status
+          status: currentUser.status === 'Active'
         });
       }
     });
   }
 
   onSubmit(): void {
-    if (this.userForm.valid) {
+    // Ensure passwords match and the whole form is valid
+    if (this.userForm.valid && !this.userForm.hasError('passwordMismatch')) {
       const formValue = this.userForm.value;
       const userData: User = {
         userId: formValue.userId || crypto.randomUUID(),
@@ -82,16 +106,30 @@ export class UserEditComponent {
         middleName: formValue.middleName,
         lastName: formValue.lastName,
         phoneNumber: formValue.phoneNumber,
-        status: formValue.status,
+        status: formValue.status ? 'Active' : 'Inactive',
         createdAt: this.user()?.createdAt || new Date(),
         createdBy: this.user()?.createdBy || 'system',
         updatedAt: new Date(),
         updatedBy: 'system'
       };
+      // attach optional extended fields without changing the User type
+      (userData as any).nationalId = formValue.nationalId;
+      (userData as any).gender = formValue.gender;
+      (userData as any).dob = formValue.dob;
+      (userData as any).nationality = formValue.nationality;
       this.formSubmit.emit(userData);
       // Show success toast
       this.notification.success('User saved', 'The user was saved successfully.');
     }
+  }
+
+  /**
+   * Validator to ensure password and confirmPassword match.
+   */
+  private passwordsMatchValidator(group: FormGroup) {
+    const pw = group.get('password')?.value;
+    const cpw = group.get('confirmPassword')?.value;
+    return pw && cpw && pw !== cpw ? { passwordMismatch: true } : null;
   }
 
   onCancel(): void {
