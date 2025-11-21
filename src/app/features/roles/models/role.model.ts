@@ -1,7 +1,8 @@
 export interface Role {
   roleId: string;
   roleName: string;
-  description?: string;  
+  description?: string;
+  status: string; // 'Active' | 'Inactive'
   createdAt: Date;
   createdBy: string;
   updatedAt?: Date;

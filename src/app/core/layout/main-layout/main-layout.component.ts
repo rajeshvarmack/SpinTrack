@@ -56,6 +56,7 @@ export class MainLayoutComponent {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: any) => {
+        console.log('Navigation event:', event.url);
         this.currentRoute.set(event.url);
         // Auto-expand admin menu when on admin routes
         if (this.isAdminRoute()) {

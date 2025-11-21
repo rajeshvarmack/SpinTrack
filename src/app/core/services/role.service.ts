@@ -11,6 +11,7 @@ export class RoleService {
       roleId: '1',
       roleName: 'Super Admin',
       description: 'Full system access with all permissions',
+      status: 'Active',
       createdAt: new Date('2024-01-01'),
       createdBy: '1',
       permissions: []
@@ -19,6 +20,7 @@ export class RoleService {
       roleId: '2',
       roleName: 'Station Manager',
       description: 'Manage station operations and staff',
+      status: 'Active',
       createdAt: new Date('2024-01-05'),
       createdBy: '1',
       permissions: []
@@ -27,6 +29,7 @@ export class RoleService {
       roleId: '3',
       roleName: 'Sales Manager',
       description: 'Manage sales and fuel operations',
+      status: 'Active',
       createdAt: new Date('2024-01-10'),
       createdBy: '1',
       permissions: []
@@ -35,6 +38,7 @@ export class RoleService {
       roleId: '4',
       roleName: 'Accountant',
       description: 'Handle financial transactions and reports',
+      status: 'Active',
       createdAt: new Date('2024-01-15'),
       createdBy: '1',
       permissions: []
@@ -43,6 +47,7 @@ export class RoleService {
       roleId: '5',
       roleName: 'Operator',
       description: 'Basic operational access',
+      status: 'Inactive',
       createdAt: new Date('2024-01-20'),
       createdBy: '1',
       permissions: []
@@ -51,6 +56,7 @@ export class RoleService {
       roleId: '6',
       roleName: 'Viewer',
       description: 'Read-only access to reports',
+      status: 'Active',
       createdAt: new Date('2024-02-01'),
       createdBy: '1',
       permissions: []
@@ -59,6 +65,7 @@ export class RoleService {
       roleId: '7',
       roleName: 'Maintenance Staff',
       description: 'Manage equipment maintenance',
+      status: 'Active',
       createdAt: new Date('2024-02-10'),
       createdBy: '1',
       permissions: []
@@ -67,6 +74,7 @@ export class RoleService {
       roleId: '8',
       roleName: 'Auditor',
       description: 'Audit and compliance access',
+      status: 'Active',
       createdAt: new Date('2024-02-15'),
       createdBy: '1',
       permissions: []
@@ -86,6 +94,7 @@ export class RoleService {
       roleId: (this.mockRoles.length + 1).toString(),
       roleName: role.roleName || '',
       description: role.description,
+      status: role.status || 'Active',
       createdAt: new Date(),
       createdBy: '1',
       permissions: []

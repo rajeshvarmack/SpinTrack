@@ -1,10 +1,9 @@
-export interface Permission {
-  permissionId: string;
+export interface SubModule {
   subModuleId: string;
-  subModuleName?: string; // For display purposes
+  moduleId: string;
   moduleName?: string; // For display purposes
-  permissionKey: string;
-  permissionName: string;
+  subModuleKey: string;
+  subModuleName: string;
   status: 'Active' | 'Inactive';
   isDeleted?: boolean;
   createdAt: Date;
