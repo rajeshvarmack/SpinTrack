@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, input, output, effect, signal, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { NgSelectModule } from '@ng-select/ng-select';
 import { DatePicker } from 'primeng/datepicker';
 import { ToggleSwitch } from 'primeng/toggleswitch';
@@ -15,7 +15,7 @@ import { CanComponentDeactivate } from '../../../core/guards/unsaved-changes.gua
   templateUrl: './user-edit.component.html',
   styleUrls: ['./user-edit.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, NgSelectModule, DatePicker, ToggleSwitch]
+  imports: [ReactiveFormsModule, FormsModule, NgSelectModule, DatePicker, ToggleSwitch]
 })
 export class UserEditComponent {
   user = input<User | null>(null);

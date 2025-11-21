@@ -1,12 +1,12 @@
 import { Component, OnInit, signal, computed, inject, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { PermissionService } from '../../../core/services/permission.service';
 import { Permission } from '../models/permission.model';
 import { Module } from '../models/module.model';
 
 @Component({
   selector: 'app-permission-list',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './permission-list.component.html',
   styleUrl: './permission-list.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
