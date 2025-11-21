@@ -1,6 +1,9 @@
-import { Component, OnInit, signal, computed, inject, ChangeDetectionStrategy, PLATFORM_ID, effect } from '@angular/core';
+import { Component, OnInit, signal, computed, inject, ChangeDetectionStrategy, PLATFORM_ID, effect, DestroyRef } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
+import { fromEvent } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { UserService } from '../../../core/services/user.service';
 import { User } from '../models/user.model';
 import { PrimeNgTableModule } from '../../../shared/modules/primeng-table.module';
@@ -25,10 +28,19 @@ export class UserListComponent implements OnInit {
   frozenCols: any[] = [];
 
   constructor() {
+    const destroyRef = inject(DestroyRef);
+    
     // Calculate rows per page based on viewport height
     if (isPlatformBrowser(this.platformId)) {
       this.calculateRowsPerPage();
-      window.addEventListener('resize', () => this.calculateRowsPerPage());
+      
+      // Use fromEvent for zoneless compatibility
+      fromEvent(window, 'resize')
+        .pipe(
+          debounceTime(200),
+          takeUntilDestroyed(destroyRef)
+        )
+        .subscribe(() => this.calculateRowsPerPage());
     }
   }
 

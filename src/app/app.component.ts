@@ -11,5 +11,5 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'SpinTrack';
+  title = 'TeamDesk';
 }

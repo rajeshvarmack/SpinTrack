@@ -7,13 +7,15 @@ import { UnsavedChangesGuard } from './core/guards/unsaved-changes.guard';
 import { UserViewComponent } from './features/users/user-view/user-view.component';
 import { RoleListComponent } from './features/roles/role-list/role-list.component';
 import { PermissionListComponent } from './features/permissions/permission-list/permission-list.component';
+import { LoginComponent } from './features/auth/login/login.component';
 
 export const routes: Routes = [
+  { path: 'login', component: LoginComponent },
   {
     path: '',
     component: MainLayoutComponent,
     children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: '', redirectTo: '/login', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent },
       { path: 'users', component: UserListComponent },
       { path: 'users/add', component: UserEditComponent, canDeactivate: [UnsavedChangesGuard] },

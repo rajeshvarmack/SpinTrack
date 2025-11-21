@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, afterNextRender, Injector, inject } from '@angular/core';
 import { MessageService } from 'primeng/api';
 
 export interface ToastOptions {
@@ -12,8 +12,12 @@ export class NotificationService {
   private defaultLife = 4000;
   private liveRegionEl: HTMLDivElement | null = null;
 
+  private injector = inject(Injector);
+  
   constructor(private messageService: MessageService) {
-    this.ensureLiveRegion();
+    afterNextRender(() => {
+      this.ensureLiveRegion();
+    }, { injector: this.injector });
   }
 
   private ensureLiveRegion() {

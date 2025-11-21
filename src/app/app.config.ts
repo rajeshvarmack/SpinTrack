@@ -1,4 +1,4 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, provideZonelessChangeDetection } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
 import { providePrimeNG } from 'primeng/config';
@@ -13,7 +13,7 @@ import {
   LegendComponent
 } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
-import Aura from '@primeng/themes/aura';
+import Aura from '@primeuix/themes/aura';
 
 import { routes } from './app.routes';
 
@@ -30,7 +30,7 @@ echarts.use([
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true }), 
+    provideZonelessChangeDetection(), 
     provideRouter(routes),
     provideAnimations(),
     provideEchartsCore({ echarts }),
@@ -38,11 +38,11 @@ export const appConfig: ApplicationConfig = {
       theme: {
         preset: Aura,
         options: {
-          darkModeSelector: false
+          darkModeSelector: false,
+          cssLayer: false
         }
       }
-    })
-    ,
+    }),
     MessageService,
     ConfirmationService
   ]
