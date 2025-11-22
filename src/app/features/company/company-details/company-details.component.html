@@ -1,9 +1,9 @@
 <!-- Company Details Tab Content -->
-<div class="px-4 py-3 sm:px-6">
-  <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-6" [formGroup]="companyForm">
+<div class="p-6">
+  <div class="bg-white rounded-lg border border-gray-200 p-6" [formGroup]="companyForm">
     
     <!-- Section 1: Company Information -->
-    <div class="mb-8">
+    <div class="mb-6">
       <div class="border-l-4 border-cyan-500 pl-4 mb-4">
         <h2 class="text-base font-semibold text-gray-800">Company Information</h2>
         <p class="text-xs text-gray-600 mt-0.5">Basic company details and branding</p>
@@ -70,7 +70,7 @@
     </div>
 
     <!-- Section 2: Regional Settings -->
-    <div class="mb-8">
+    <div class="mb-6">
       <div class="border-l-4 border-cyan-500 pl-4 mb-4">
         <h2 class="text-base font-semibold text-gray-800">Regional Settings</h2>
         <p class="text-xs text-gray-600 mt-0.5">Location, currency, timezone, and date format preferences</p>
@@ -106,7 +106,7 @@
     </div>
 
     <!-- Section 3: Fiscal & Business Settings -->
-    <div class="mb-8">
+    <div class="mb-6">
       <div class="border-l-4 border-cyan-500 pl-4 mb-4">
         <h2 class="text-base font-semibold text-gray-800">Fiscal & Business Settings</h2>
         <p class="text-xs text-gray-600 mt-0.5">Financial year and business operation settings</p>
@@ -124,18 +124,43 @@
     </div>
 
     <!-- Status Toggle -->
-    <div class="border-t border-gray-200 pt-4 mt-6">
-      <div class="bg-cyan-50 rounded-lg p-4">
+    <div class="border-t border-gray-200 pt-4 mt-4">
+      <div class="bg-blue-50 rounded-lg p-4">
         <div class="flex items-center gap-3">
           <label class="relative inline-flex items-center cursor-pointer">
             <input type="checkbox" formControlName="status" class="sr-only peer" />
-            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-cyan-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-cyan-600"></div>
+            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
           </label>
           <div>
             <span class="font-semibold text-gray-900">Active Company</span>
             <p class="text-xs text-gray-600 mt-0.5">Enable this company for immediate system access and operations</p>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="border-t border-gray-200 mt-6 pt-4">
+      <div class="flex justify-end gap-3">
+        <button 
+          type="button" 
+          (click)="onCancel()" 
+          class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 hover:border-gray-400 transition-colors font-medium text-sm">
+          Cancel
+        </button>
+        <button 
+          type="submit" 
+          [disabled]="companyForm.invalid || stateService.isSaving()" 
+          class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed font-medium text-sm">
+          @if (stateService.isSaving()) {
+            <span class="flex items-center gap-2">
+              <span class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+              Saving...
+            </span>
+          } @else {
+            <span>{{ isEditMode() ? 'Save Changes' : 'Create Company' }}</span>
+          }
+        </button>
       </div>
     </div>
   </div>

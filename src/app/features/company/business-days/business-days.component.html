@@ -1,1 +1,214 @@
-<p>business-days works!</p>
+<div class="p-6">
+  <!-- Header Section with Stats -->
+  <div class="mb-3 flex justify-between items-start flex-wrap gap-3">
+    <div>
+      <h2 class="text-2xl font-bold text-gray-800">Business Days Configuration</h2>
+      <p class="text-sm text-gray-500">Configure your company's working days and schedule</p>
+    </div>
+    
+    <!-- Statistics Cards -->
+    <div class="flex gap-2">
+      <div class="flex items-center gap-3 px-4 py-2 rounded-xl bg-gradient-to-br from-green-500 to-green-600 text-white shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 min-w-[140px]">
+        <div class="text-3xl font-bold opacity-90">✓</div>
+        <div>
+          <div class="text-2xl font-bold leading-none mb-1">{{ workingDaysCount }}</div>
+          <div class="text-xs font-medium opacity-95">Working Days</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-3 px-4 py-2 rounded-xl bg-gradient-to-br from-red-500 to-red-600 text-white shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 min-w-[140px]">
+        <div class="text-3xl font-bold opacity-90">✕</div>
+        <div>
+          <div class="text-2xl font-bold leading-none mb-1">{{ nonWorkingDaysCount }}</div>
+          <div class="text-xs font-medium opacity-95">Non-Working Days</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Week Overview Timeline -->
+  <div class="mb-3 bg-gray-50 border border-gray-200 rounded-xl p-3">
+    <div class="text-sm font-semibold text-gray-600 mb-3 text-center">Week at a Glance</div>
+    <div class="flex justify-between gap-2">
+      @for (dayGroup of getDaysArray().controls; track $index) {
+        <div 
+          class="flex-1 flex flex-col items-center gap-2 py-3 px-1 rounded-xl bg-white border-2 transition-all duration-300 cursor-pointer hover:shadow-md hover:-translate-y-1"
+          [ngClass]="{
+            'border-green-500 bg-gradient-to-br from-green-50 to-green-100': getDayFormGroup($index).value.isWorkingDay,
+            'border-red-500 bg-gradient-to-br from-red-50 to-red-100': !getDayFormGroup($index).value.isWorkingDay
+          }"
+          [title]="getDayConfig($index).name + ' - ' + getStatusText(getDayFormGroup($index).value.isWorkingDay)">
+          <div class="text-xs font-bold text-gray-800">{{ getDayConfig($index).shortName }}</div>
+          <div 
+            class="w-3 h-3 rounded-full transition-all duration-300"
+            [ngClass]="{
+              'bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]': getDayFormGroup($index).value.isWorkingDay,
+              'bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]': !getDayFormGroup($index).value.isWorkingDay
+            }"></div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="mb-3 flex items-center gap-2 p-2 bg-gray-50 rounded-lg flex-wrap">
+    <div class="font-semibold text-gray-600 text-sm">Quick Setup:</div>
+    <button type="button" 
+      class="flex items-center gap-2 px-4 py-2 border-2 border-gray-300 bg-white rounded-lg text-sm font-semibold text-gray-600 hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50 hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 active:translate-y-0"
+      (click)="setStandardWeek()" 
+      title="Monday to Friday working">
+      <span class="text-base">📅</span> Standard Week (5 Days)
+    </button>
+    <button type="button" 
+      class="flex items-center gap-2 px-4 py-2 border-2 border-gray-300 bg-white rounded-lg text-sm font-semibold text-gray-600 hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50 hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 active:translate-y-0"
+      (click)="setSixDayWeek()" 
+      title="Monday to Saturday working">
+      <span class="text-base">📆</span> Six Day Week
+    </button>
+    <button type="button" 
+      class="flex items-center gap-2 px-4 py-2 border-2 border-gray-300 bg-white rounded-lg text-sm font-semibold text-gray-600 hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50 hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 active:translate-y-0"
+      (click)="setAllWorking()" 
+      title="All days working">
+      <span class="text-base">🔄</span> All Days Working
+    </button>
+  </div>
+
+  <!-- Main Table -->
+  <form [formGroup]="businessDaysForm">
+    <div formArrayName="days" class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-3">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="bg-gray-50 border-b border-gray-200">
+            <th class="py-3 px-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider w-1/4">Day of Week</th>
+            <th class="py-3 px-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider w-1/5">Working Day</th>
+            <th class="py-3 px-4 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider w-[12%]">Weekend</th>
+            <th class="py-3 px-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider w-[30%]">Remarks</th>
+            <th class="py-3 px-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider w-[13%]">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (dayControl of getDaysArray().controls; track $index) {
+            <tr 
+              [formGroupName]="$index"
+              class="border-b border-gray-200 transition-all duration-200 hover:bg-gray-50"
+              [ngClass]="{
+                'bg-gradient-to-r from-yellow-50 to-yellow-50/50': getDayConfig($index).isWeekend && !getDayFormGroup($index).value.isWorkingDay,
+                'bg-gradient-to-r from-green-50 to-green-50/50': getDayConfig($index).isWeekend && getDayFormGroup($index).value.isWorkingDay,
+                'bg-gradient-to-r from-red-50 to-red-50/50': !getDayConfig($index).isWeekend && !getDayFormGroup($index).value.isWorkingDay
+              }">
+              
+              <!-- Day Name -->
+              <td class="py-2 px-4">
+                <div class="flex items-center gap-3">
+                  <div 
+                    class="w-1 h-10 rounded-full flex-shrink-0"
+                    [style.background-color]="getDayConfig($index).color"></div>
+                  <span class="text-base font-semibold text-gray-800">{{ getDayConfig($index).name }}</span>
+                  @if (getDayConfig($index).isWeekend) {
+                    <span class="inline-block px-2 py-1 bg-amber-400 text-amber-900 rounded-md text-xs font-semibold uppercase">Weekend</span>
+                  }
+                </div>
+              </td>
+
+              <!-- Working Day Toggle -->
+              <td class="py-2 px-4">
+                <label class="flex items-center gap-3 cursor-pointer select-none">
+                  <input type="checkbox" formControlName="isWorkingDay" class="sr-only peer">
+                  <div class="relative w-14 h-7 bg-gray-300 rounded-full shadow-inner transition-all duration-300 peer-checked:bg-gradient-to-r peer-checked:from-green-500 peer-checked:to-green-600">
+                    <div class="absolute w-5 h-5 bg-white rounded-full top-1 left-1 transition-all duration-300 shadow-md peer-checked:translate-x-7"></div>
+                  </div>
+                  <span class="text-sm font-semibold text-gray-600 min-w-[30px]">
+                    {{ getDayFormGroup($index).value.isWorkingDay ? 'Yes' : 'No' }}
+                  </span>
+                </label>
+              </td>
+
+              <!-- Weekend Checkbox -->
+              <td class="py-2 px-4">
+                <div class="flex items-center justify-center">
+                  <input 
+                    type="checkbox" 
+                    formControlName="isWeekend" 
+                    [id]="'weekend-' + $index"
+                    class="hidden"
+                    [disabled]="true">
+                  <label [for]="'weekend-' + $index">
+                    <span class="text-2xl" 
+                      [ngClass]="getDayConfig($index).isWeekend ? 'text-amber-400' : 'text-gray-400'">
+                      {{ getDayConfig($index).isWeekend ? '☑' : '☐' }}
+                    </span>
+                  </label>
+                </div>
+              </td>
+
+              <!-- Remarks -->
+              <td class="py-2 px-4">
+                <input 
+                  type="text" 
+                  formControlName="remarks" 
+                  class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg text-sm text-gray-800 transition-all duration-200 focus:outline-none focus:border-blue-500 focus:ring-3 focus:ring-blue-100 placeholder:text-gray-400 placeholder:italic"
+                  placeholder="Add notes..."
+                  maxlength="250">
+              </td>
+
+              <!-- Status -->
+              <td class="py-2 px-4">
+                <span 
+                  class="inline-flex items-center px-3 py-2 rounded-lg text-xs font-semibold uppercase tracking-wide border"
+                  [ngClass]="{
+                    'bg-gradient-to-br from-green-100 to-green-200 text-green-800 border-green-500': getDayFormGroup($index).value.isWorkingDay,
+                    'bg-gradient-to-br from-red-100 to-red-200 text-red-800 border-red-500': !getDayFormGroup($index).value.isWorkingDay
+                  }">
+                  {{ getStatusText(getDayFormGroup($index).value.isWorkingDay) }}
+                </span>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Validation Warning -->
+    @if (workingDaysCount === 0) {
+      <div class="flex items-center gap-3 px-4 py-3 bg-gradient-to-br from-yellow-50 to-yellow-100 border-2 border-yellow-400 rounded-xl mb-4 text-yellow-900 font-semibold animate-[shake_0.5s_ease]">
+        <span class="text-2xl">⚠️</span>
+        <span>At least one working day must be configured</span>
+      </div>
+    }
+
+    <!-- Validation Warning -->
+    @if (workingDaysCount === 0) {
+      <div class="flex items-center gap-3 px-4 py-2 bg-yellow-50 border border-yellow-400 rounded-lg mb-3 text-yellow-900 font-semibold animate-[shake_0.5s_ease]">
+        <span class="text-xl">⚠️</span>
+        <span>At least one working day must be configured</span>
+      </div>
+    }
+
+    <!-- Action Buttons -->
+    <div class="border-t border-gray-200 pt-4">
+      <div class="flex justify-end gap-3">
+        <button 
+          type="button" 
+          (click)="saveBusinessDays()"
+          [disabled]="!businessDaysForm.valid || isSaving() || workingDaysCount === 0"
+          class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed font-medium text-sm">
+          @if (isSaving()) {
+            <span class="flex items-center gap-2">
+              <span class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+              Saving...
+            </span>
+          } @else {
+            <span>Save Business Days</span>
+          }
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <!-- Loading Overlay -->
+  @if (isLoading()) {
+    <div class="absolute inset-0 bg-white/95 flex flex-col items-center justify-center gap-4 z-50 rounded-2xl">
+      <div class="w-12 h-12 border-4 border-gray-200 border-t-blue-600 rounded-full animate-spin"></div>
+      <p class="text-base font-semibold text-gray-600">Loading business days...</p>
+    </div>
+  }
+</div>

@@ -2,6 +2,7 @@ import { Component, OnInit, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { Router, ActivatedRoute } from '@angular/router';
 import { CompanyFormStateService } from '../services/company-form-state.service';
 import { CountryService } from '../../../core/services/country.service';
 import { CurrencyService } from '../../../core/services/currency.service';
@@ -20,11 +21,13 @@ import { DateFormat } from '../../date-formats/models/date-format.model';
   styleUrls: ['./company-details.component.css']
 })
 export class CompanyDetailsComponent implements OnInit {
-  private stateService = inject(CompanyFormStateService);
+  stateService = inject(CompanyFormStateService);
   private countryService = inject(CountryService);
   private currencyService = inject(CurrencyService);
   private timeZoneService = inject(TimeZoneService);
   private dateFormatService = inject(DateFormatService);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   companyForm!: FormGroup;
 
@@ -82,6 +85,14 @@ export class CompanyDetailsComponent implements OnInit {
 
   removeLogo(): void {
     this.stateService.setLogoPreview(null);
+  }
+
+  onCancel(): void {
+    this.router.navigate(['/companies']);
+  }
+
+  isEditMode(): boolean {
+    return this.route.snapshot.paramMap.has('id');
   }
 }
 

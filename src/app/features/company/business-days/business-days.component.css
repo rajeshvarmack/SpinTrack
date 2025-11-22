@@ -1,0 +1,8 @@
+/* Minimal custom styles - most styling done via Tailwind CSS */
+
+/* Shake animation for validation warning */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}

@@ -1,31 +1,16 @@
 <!-- Company Form Shell Component -->
 <div class="min-h-screen bg-gray-50 flex flex-col">
   <!-- Page Header -->
-  <div class="bg-white border-b border-gray-200 px-4 py-3 sm:px-6">
-    <div class="flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <button (click)="onCancel()" class="p-2 hover:bg-gray-100 rounded-full transition-colors">
-          <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-          </svg>
-        </button>
-        <div>
-          <h1 class="text-xl font-bold text-gray-800">{{ isEditMode() ? 'Edit Company' : 'Add New Company' }}</h1>
-          <p class="text-xs text-gray-600">{{ isEditMode() ? 'Update company details and regional settings' : 'Create a new company with appropriate settings and configurations' }}</p>
-        </div>
-      </div>
-      <div class="flex gap-3">
-        <button type="button" (click)="onCancel()" class="px-5 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-slate-100 hover:border-slate-400 transition-colors shadow-sm font-medium text-sm">
-          Cancel
-        </button>
-        <button type="submit" form="companyForm" [disabled]="companyForm.invalid || stateService.isSaving()"
-          class="px-5 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed font-medium text-sm">
-          @if (stateService.isSaving()) {
-            <span>Saving...</span>
-          } @else {
-            <span>{{ isEditMode() ? 'Save Changes' : 'Create Company' }}</span>
-          }
-        </button>
+  <div class="bg-white border-b border-gray-200 px-6 py-3">
+    <div class="flex items-center gap-3">
+      <button (click)="onCancel()" class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+        <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+      </button>
+      <div>
+        <h1 class="text-xl font-bold text-gray-800">{{ isEditMode() ? 'Edit Company' : 'Add New Company' }}</h1>
+        <p class="text-xs text-gray-500">{{ isEditMode() ? 'Update company details and regional settings' : 'Create a new company with appropriate settings and configurations' }}</p>
       </div>
     </div>
   </div>
@@ -33,8 +18,8 @@
   <!-- Main Content with Sidebar -->
   <div class="flex-1 flex overflow-hidden">
     <!-- Left Sidebar Navigation -->
-    <div class="w-64 bg-white border-r border-gray-200 flex flex-col py-6">
-      <nav class="space-y-1 px-3">
+    <div class="w-56 bg-white border-r border-gray-200 flex flex-col py-4">
+      <nav class="space-y-0.5 px-2">
         @for (tab of tabs; track tab.id) {
           <button type="button"
             (click)="navigateToTab(tab)"

@@ -23,8 +23,6 @@ import { BusinessHoursComponent } from './features/company/business-hours/busine
 import { HolidaysComponent } from './features/company/holidays/holidays.component';
 import { CompanyOverviewViewComponent } from './features/company/company-overview-view/company-overview-view.component';
 import { BusinessScheduleViewComponent } from './features/company/business-schedule-view/business-schedule-view.component';
-import { BusinessHoursViewComponent } from './features/company/business-hours-view/business-hours-view.component';
-import { HolidaysViewComponent } from './features/company/holidays-view/holidays-view.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
