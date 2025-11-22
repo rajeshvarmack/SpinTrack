@@ -44,3 +44,4 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 ## UI Libraries
 - Prefer tailwindcss for styling and layout. Please use the maximum capability of tailwindcss before considering custom css. Use custom CSS only if the same cannot be achieved using tailwindcss.
 - Do NOT use component libraries like Angular Material if not needed
+- Always use ng-select for select dropdowns

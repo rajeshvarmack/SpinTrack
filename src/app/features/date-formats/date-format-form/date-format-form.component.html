@@ -1,0 +1,280 @@
+<!-- DateFormat Form Component with Master-Detail Layout -->
+<div class="flex bg-gray-50 overflow-hidden" style="height: calc(100vh - 64px);">
+  <!-- Left Sidebar - DateFormat List -->
+  <div class="w-1/4 bg-white border-r border-gray-200 flex flex-col overflow-hidden">
+    <!-- Sidebar Header -->
+    <div class="p-4 border-b border-gray-200 flex-shrink-0">
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+          </div>
+          <div>
+            <h2 class="text-base font-bold text-gray-800">Date Formats</h2>
+            <p class="text-xs text-gray-500">{{ allDateFormats().length }} formats configured</p>
+          </div>
+        </div>
+        <button (click)="addNewDateFormat()" class="w-8 h-8 bg-primary-600 hover:bg-primary-700 rounded-lg flex items-center justify-center transition-colors">
+          <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Search Box -->
+      <div class="relative">
+        <input 
+          type="text" 
+          placeholder="Search formats..."
+          [(ngModel)]="sidebarSearchTerm"
+          class="w-full pl-8 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+        <svg class="absolute left-2.5 top-2.5 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+      </div>
+
+      <!-- View Toggle -->
+      <div class="flex gap-2 mt-3">
+        <button 
+          (click)="toggleViewMode('cards')"
+          [class]="viewMode() === 'cards' ? 'bg-primary-600 text-white hover:bg-primary-700' : 'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50'"
+          class="flex-1 px-3 py-2 rounded-lg text-xs font-medium flex items-center justify-center gap-1.5 transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+          </svg>
+          Cards
+        </button>
+        <button 
+          (click)="toggleViewMode('list')"
+          [class]="viewMode() === 'list' ? 'bg-primary-600 text-white hover:bg-primary-700' : 'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50'"
+          class="flex-1 px-3 py-2 rounded-lg text-xs font-medium flex items-center justify-center gap-1.5 transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+          List
+        </button>
+      </div>
+    </div>
+
+    <!-- DateFormat Cards/List -->
+    <div class="flex-1 overflow-y-auto p-3 min-h-0">
+      @if (viewMode() === 'cards') {
+        <!-- Cards View -->
+        <div class="space-y-2">
+          @for (d of filteredSidebarDateFormats(); track d.dateFormatId) {
+            <div 
+              (click)="selectDateFormat(d)"
+              [class]="selectedDateFormatId() === d.dateFormatId ? 'bg-primary-50 border-primary-300' : 'bg-white border-gray-200 hover:border-gray-300'"
+              class="p-3 rounded-lg border-2 cursor-pointer transition-all">
+              <div class="flex items-start gap-3">
+                <div [class]="getDateFormatCardColor(d.formatString)" class="w-10 h-10 rounded-lg flex items-center justify-center text-lg font-bold text-gray-600 flex-shrink-0">
+                  <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                  </svg>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between mb-1">
+                    <h3 class="text-sm font-semibold text-gray-900 truncate">{{d.formatString}}</h3>
+                    <span 
+                      [class]="d.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'"
+                      class="px-2 py-0.5 text-xs font-medium rounded-full">
+                      {{d.status}}
+                    </span>
+                  </div>
+                  <p class="text-xs text-gray-500 mb-1.5 truncate">{{d.description}}</p>
+                  <div class="flex items-center gap-3 text-xs text-gray-500">
+                    @if (d.isDefault) {
+                      <span class="flex items-center gap-1 text-primary-600 font-medium">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        Default
+                      </span>
+                    }
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      } @else {
+        <!-- List View -->
+        <div class="space-y-1">
+          @for (d of filteredSidebarDateFormats(); track d.dateFormatId) {
+            <div 
+              (click)="selectDateFormat(d)"
+              [class]="selectedDateFormatId() === d.dateFormatId ? 'bg-primary-50 border-l-primary-600' : 'bg-white border-l-transparent hover:bg-gray-50'"
+              class="px-3 py-2 border-l-4 cursor-pointer transition-all flex items-center justify-between">
+              <div class="flex items-center gap-2 flex-1 min-w-0">
+                <span class="text-sm font-bold text-gray-500 w-8">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                </span>
+                <div class="flex-1 min-w-0">
+                  <h3 class="text-sm font-semibold text-gray-900 truncate">{{d.formatString}}</h3>
+                  <p class="text-xs text-gray-500 truncate">{{d.description}}</p>
+                </div>
+              </div>
+              <span 
+                [class]="d.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'"
+                class="px-2 py-0.5 text-xs font-medium rounded">
+                {{d.status}}
+              </span>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Right Panel - DateFormat Details -->
+  <div class="flex-1 flex flex-col overflow-hidden">
+    @if (selectedDateFormatId() !== null || !dateFormat()) {
+      <!-- Header -->
+      <div class="bg-white border-b border-gray-200 px-6 py-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <button (click)="backToList()" class="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="Back to List">
+              <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+              </svg>
+            </button>
+            <div>
+              <h1 class="text-xl font-bold text-gray-800">{{ formTitle }}</h1>
+              <p class="text-sm text-gray-600">{{ selectedDateFormatId() ? 'Manage Date Format information' : 'Add a new Date Format to the system' }}</p>
+            </div>
+          </div>
+          @if (!isInEditMode() && selectedDateFormatId()) {
+            <button type="button" (click)="enableEditMode()" class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors text-sm font-medium">
+              <svg class="w-4 h-4 inline-block mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+              </svg>
+              Edit Date Format
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- Content Area -->
+      <div class="flex-1 overflow-y-auto bg-gray-50 px-6 py-6">
+        <form [formGroup]="dateFormatForm" (ngSubmit)="onSubmit()">
+          <!-- DateFormat Information Card -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+              <div class="flex items-center gap-2 mb-4">
+                <div class="w-10 h-10 bg-gray-900 rounded-lg flex items-center justify-center">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                  </svg>
+                </div>
+                <h2 class="text-base font-semibold text-gray-800">Date Format Information</h2>
+              </div>
+
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Format String *</label>
+                  <input 
+                    type="text" 
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm disabled:bg-gray-100 disabled:cursor-not-allowed" 
+                    formControlName="formatString" 
+                    placeholder="e.g., dd/MM/yyyy" 
+                  />
+                  @if (dateFormatForm.get('formatString')?.invalid && dateFormatForm.get('formatString')?.touched) {
+                    <span class="text-xs text-red-600 mt-1 block">Format string is required (max 50 characters)</span>
+                  }
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                    <input 
+                      type="text" 
+                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm disabled:bg-gray-100 disabled:cursor-not-allowed" 
+                      formControlName="description" 
+                      placeholder="e.g., Day/Month/Year" 
+                    />
+                </div>
+
+                <!-- Is Default Checkbox -->
+                <div>
+                  <label class="flex items-center gap-2 cursor-pointer">
+                    <input 
+                      type="checkbox" 
+                      formControlName="isDefault"
+                      class="w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 rounded focus:ring-primary-500 focus:ring-2">
+                    <span class="text-sm font-medium text-gray-700">Set as default format</span>
+                  </label>
+                </div>
+
+                <!-- Status Section -->
+                <div>
+                  <div class="flex items-start gap-3 p-4 bg-cyan-50 rounded-lg">
+                    <!-- Toggle Switch -->
+                    <label class="relative inline-flex items-center cursor-pointer">
+                      <input 
+                        type="checkbox" 
+                        formControlName="status"
+                        class="sr-only peer">
+                      <div class="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
+                    </label>
+                    <!-- Text Content -->
+                    <div class="flex-1">
+                      <h4 class="text-sm font-semibold text-gray-800 mb-1">Active Date Format</h4>
+                      <p class="text-xs text-gray-600">Enable this date format for immediate use in the system</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Status Count Cards -->
+            <div class="grid grid-cols-3 gap-4 mb-6">
+              <div class="bg-white rounded-lg border border-gray-200 p-6 text-center">
+                <div class="text-4xl font-bold text-green-600 mb-2">{{ activeDateFormatsCount() }}</div>
+                <div class="text-sm text-gray-600">Active Formats</div>
+              </div>
+              <div class="bg-white rounded-lg border border-gray-200 p-6 text-center">
+                <div class="text-4xl font-bold text-red-600 mb-2">{{ inactiveDateFormatsCount() }}</div>
+                <div class="text-sm text-gray-600">Inactive Formats</div>
+              </div>
+              <div class="bg-white rounded-lg border border-gray-200 p-6 text-center">
+                <div class="text-4xl font-bold text-primary-600 mb-2">{{ allDateFormats().length }}</div>
+                <div class="text-sm text-gray-600">All Formats</div>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            @if (isInEditMode() || !selectedDateFormatId()) {
+              <div class="flex gap-3 justify-end">
+                <button 
+                  type="button" 
+                  class="px-5 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium" 
+                  (click)="cancelEdit()">
+                  Cancel
+                </button>
+                <button 
+                  type="submit" 
+                  [disabled]="dateFormatForm.invalid"
+                  class="px-5 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium">
+                  {{ selectedDateFormatId() ? 'Save Changes' : 'Create Date Format' }}
+                </button>
+              </div>
+            }
+        </form>
+      </div>
+    } @else {
+      <!-- No DateFormat Selected -->
+      <div class="flex-1 flex items-center justify-center bg-gray-50">
+        <div class="text-center">
+          <svg class="w-20 h-20 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+          </svg>
+          <h3 class="text-lg font-semibold text-gray-700 mb-2">Select a Date Format</h3>
+          <p class="text-sm text-gray-500">Choose a Date Format from the list to view or edit its details</p>
+        </div>
+      </div>
+    }
+  </div>
+</div>

@@ -1,0 +1,143 @@
+<!-- Company Details Tab Content -->
+<div class="px-4 py-3 sm:px-6">
+  <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-6" [formGroup]="companyForm">
+    
+    <!-- Section 1: Company Information -->
+    <div class="mb-8">
+      <div class="border-l-4 border-cyan-500 pl-4 mb-4">
+        <h2 class="text-base font-semibold text-gray-800">Company Information</h2>
+        <p class="text-xs text-gray-600 mt-0.5">Basic company details and branding</p>
+      </div>
+
+      <div class="flex flex-col md:flex-row gap-8">
+        <!-- Logo Upload Section -->
+        <div class="md:w-1/4">
+          <label class="upload-zone block">
+            <div class="upload-inner flex items-center justify-center flex-col p-3 rounded-lg border-2 border-dashed border-gray-200 hover:border-primary-500 transition-colors cursor-pointer">
+              @if (logoPreview()) {
+                <img [src]="logoPreview()" alt="Company Logo" class="w-32 h-32 rounded-lg object-cover mb-3 shadow-sm" />
+              } @else {
+                <svg class="w-12 h-12 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                </svg>
+                <div class="text-sm text-gray-600">Drag & drop logo or</div>
+                <div class="text-sm font-medium text-primary-600 mt-1">Click to upload</div>
+              }
+            </div>
+            <input type="file" #logoInput (change)="onLogoSelected($event)" accept="image/*" class="sr-only" />
+          </label>
+          <div class="flex items-center justify-center gap-3 mt-3">
+            <button type="button" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium" (click)="logoInput.click()">
+              Upload
+            </button>
+            @if (logoPreview()) {
+              <button type="button" class="px-4 py-2 text-sm rounded-lg border border-red-200 text-red-600 hover:bg-red-50" (click)="removeLogo()">
+                Remove
+              </button>
+            }
+          </div>
+          <p class="text-xs text-gray-500 mt-2 text-center">JPG, PNG or SVG • Max size: 2MB</p>
+        </div>
+
+        <!-- Company Basic Info -->
+        <div class="md:w-3/4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Company Name *</label>
+              <input type="text" class="input w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm" formControlName="companyName" placeholder="Enter company name" />
+              @if (companyForm.get('companyName')?.invalid && companyForm.get('companyName')?.touched) {
+                <span class="text-xs text-red-600 mt-1 block">Company name is required</span>
+              }
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Company Code *</label>
+              <input type="text" class="input w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm uppercase" formControlName="companyCode" placeholder="e.g., COMP001" />
+              @if (companyForm.get('companyCode')?.invalid && companyForm.get('companyCode')?.touched) {
+                <span class="text-xs text-red-600 mt-1 block">Company code is required</span>
+              }
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Website</label>
+              <input type="text" class="input w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm" formControlName="website" placeholder="https://www.example.com" />
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Address</label>
+              <textarea rows="2" class="input w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm resize-none" formControlName="address" placeholder="Enter company address"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: Regional Settings -->
+    <div class="mb-8">
+      <div class="border-l-4 border-cyan-500 pl-4 mb-4">
+        <h2 class="text-base font-semibold text-gray-800">Regional Settings</h2>
+        <p class="text-xs text-gray-600 mt-0.5">Location, currency, timezone, and date format preferences</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Country *</label>
+          <ng-select [items]="countries" bindLabel="countryName" bindValue="countryId" formControlName="countryId" placeholder="Select country"></ng-select>
+          @if (companyForm.get('countryId')?.invalid && companyForm.get('countryId')?.touched) {
+            <span class="text-xs text-red-600 mt-1 block">Country is required</span>
+          }
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Currency *</label>
+          <ng-select [items]="currencies" bindLabel="currencyCode" bindValue="currencyId" formControlName="currencyId" placeholder="Select currency"></ng-select>
+          @if (companyForm.get('currencyId')?.invalid && companyForm.get('currencyId')?.touched) {
+            <span class="text-xs text-red-600 mt-1 block">Currency is required</span>
+          }
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Time Zone *</label>
+          <ng-select [items]="timeZones" bindLabel="timeZoneName" bindValue="timeZoneId" formControlName="timeZoneId" placeholder="Select timezone"></ng-select>
+          @if (companyForm.get('timeZoneId')?.invalid && companyForm.get('timeZoneId')?.touched) {
+            <span class="text-xs text-red-600 mt-1 block">Time zone is required</span>
+          }
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Date Format</label>
+          <ng-select [items]="dateFormats" bindLabel="formatString" bindValue="dateFormatId" formControlName="dateFormatId" placeholder="Select date format"></ng-select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: Fiscal & Business Settings -->
+    <div class="mb-8">
+      <div class="border-l-4 border-cyan-500 pl-4 mb-4">
+        <h2 class="text-base font-semibold text-gray-800">Fiscal & Business Settings</h2>
+        <p class="text-xs text-gray-600 mt-0.5">Financial year and business operation settings</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Fiscal Year Start Month *</label>
+          <ng-select [items]="fiscalMonths" bindLabel="label" bindValue="value" formControlName="fiscalYearStartMonth" placeholder="Select month"></ng-select>
+          @if (companyForm.get('fiscalYearStartMonth')?.invalid && companyForm.get('fiscalYearStartMonth')?.touched) {
+            <span class="text-xs text-red-600 mt-1 block">Fiscal year start month is required</span>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Status Toggle -->
+    <div class="border-t border-gray-200 pt-4 mt-6">
+      <div class="bg-cyan-50 rounded-lg p-4">
+        <div class="flex items-center gap-3">
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" formControlName="status" class="sr-only peer" />
+            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-cyan-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-cyan-600"></div>
+          </label>
+          <div>
+            <span class="font-semibold text-gray-900">Active Company</span>
+            <p class="text-xs text-gray-600 mt-0.5">Enable this company for immediate system access and operations</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

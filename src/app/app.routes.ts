@@ -10,6 +10,21 @@ import { LoginComponent } from './features/auth/login/login.component';
 import { ModuleFormComponent } from './features/modules/module-form/module-form.component';
 import { SubModuleFormComponent } from './features/submodules/submodule-form/submodule-form.component';
 import { PermissionFormComponent } from './features/permissions/permission-form/permission-form.component';
+import { CountryFormComponent } from './features/countries/country-form/country-form.component';
+import { CurrencyFormComponent } from './features/currencies/currency-form/currency-form.component';
+import { TimeZoneFormComponent } from './features/timezones/timezone-form/timezone-form.component';
+import { DateFormatFormComponent } from './features/date-formats/date-format-form/date-format-form.component';
+import { CompanyListComponent } from './features/company/company-list/company-list.component';
+import { CompanyFormComponent } from './features/company/company-form/company-form.component';
+import { CompanyViewComponent } from './features/company/company-view/company-view.component';
+import { CompanyDetailsComponent } from './features/company/company-details/company-details.component';
+import { BusinessDaysComponent } from './features/company/business-days/business-days.component';
+import { BusinessHoursComponent } from './features/company/business-hours/business-hours.component';
+import { HolidaysComponent } from './features/company/holidays/holidays.component';
+import { CompanyOverviewViewComponent } from './features/company/company-overview-view/company-overview-view.component';
+import { BusinessScheduleViewComponent } from './features/company/business-schedule-view/business-schedule-view.component';
+import { BusinessHoursViewComponent } from './features/company/business-hours-view/business-hours-view.component';
+import { HolidaysViewComponent } from './features/company/holidays-view/holidays-view.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -26,7 +41,45 @@ export const routes: Routes = [
       { path: 'roles', component: RoleFormComponent },
       { path: 'modules', component: ModuleFormComponent },
       { path: 'submodules', component: SubModuleFormComponent },
-      { path: 'permissions', component: PermissionFormComponent }
+      { path: 'permissions', component: PermissionFormComponent },
+      { path: 'countries', component: CountryFormComponent },
+      { path: 'currencies', component: CurrencyFormComponent },
+      { path: 'timezones', component: TimeZoneFormComponent },
+      { path: 'dateformats', component: DateFormatFormComponent },
+      { path: 'companies', component: CompanyListComponent },
+      { 
+        path: 'companies/add', 
+        component: CompanyFormComponent,
+        canDeactivate: [UnsavedChangesGuard],
+        children: [
+          { path: '', redirectTo: 'company_info', pathMatch: 'full' },
+          { path: 'company_info', component: CompanyDetailsComponent },
+          { path: 'business_days', component: BusinessDaysComponent },
+          { path: 'business_hours', component: BusinessHoursComponent },
+          { path: 'holidays', component: HolidaysComponent }
+        ]
+      },
+      { 
+        path: 'companies/:id/edit', 
+        component: CompanyFormComponent,
+        canDeactivate: [UnsavedChangesGuard],
+        children: [
+          { path: '', redirectTo: 'company_info', pathMatch: 'full' },
+          { path: 'company_info', component: CompanyDetailsComponent },
+          { path: 'business_days', component: BusinessDaysComponent },
+          { path: 'business_hours', component: BusinessHoursComponent },
+          { path: 'holidays', component: HolidaysComponent }
+        ]
+      },
+      { 
+        path: 'companies/:id', 
+        component: CompanyViewComponent,
+        children: [
+          { path: '', redirectTo: 'overview', pathMatch: 'full' },
+          { path: 'overview', component: CompanyOverviewViewComponent },
+          { path: 'business_days', component: BusinessScheduleViewComponent }
+        ]
+      }
     ]
   }
 ];

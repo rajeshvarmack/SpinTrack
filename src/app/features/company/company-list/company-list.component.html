@@ -1,0 +1,167 @@
+<div class="px-4 py-3 sm:px-6">
+  <!-- Page Header -->
+  <div class="flex items-center justify-between mb-3">
+    <div>
+      <h1 class="text-xl font-bold text-gray-800">Company Management</h1>
+      <p class="text-xs text-gray-600">Manage your organization's legal entities</p>
+    </div>
+    <div class="flex items-center gap-2">
+      <button class="px-3 py-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-lg hover:from-emerald-600 hover:to-teal-700 transition-all shadow-sm hover:shadow-md flex items-center text-sm">
+        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+        </svg>
+        Export
+      </button>
+      <button (click)="navigateToAdd()" class="px-3 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors shadow-sm hover:shadow-md flex items-center text-sm">
+        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+        </svg>
+        Add New Company
+      </button>
+    </div>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-2 mb-3">
+    <div class="flex items-center space-x-2">
+      <div class="flex-1 relative">
+        <input 
+          type="text" 
+          placeholder="Search companies by name or code..."
+          (input)="searchCompanies($event)"
+          class="w-full pl-9 pr-9 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+        <svg class="absolute left-3 top-2.5 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+        <button class="absolute right-7 top-2" title="Clear Search">
+          <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+      <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center" title="Search">
+        <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Status Cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
+    <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg shadow-sm p-4 flex flex-col items-center justify-center min-h-[100px] border border-blue-200">
+      <h3 class="text-blue-700 text-sm font-medium mb-1">All Companies</h3>
+      <p class="text-3xl font-bold text-blue-900">{{allCompaniesCount()}}</p>
+    </div>
+    <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-lg shadow-sm p-4 flex flex-col items-center justify-center min-h-[100px] border border-green-200">
+      <h3 class="text-green-700 text-sm font-medium mb-1">Active Companies</h3>
+      <p class="text-3xl font-bold text-green-900">{{activeCompaniesCount()}}</p>
+    </div>
+    <div class="bg-gradient-to-br from-red-50 to-red-100 rounded-lg shadow-sm p-4 flex flex-col items-center justify-center min-h-[100px] border border-red-200">
+      <h3 class="text-red-700 text-sm font-medium mb-1">Inactive Companies</h3>
+      <p class="text-3xl font-bold text-red-900">{{inactiveCompaniesCount()}}</p>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  @if (loading()) {
+    <div class="flex items-center justify-center h-64 bg-white rounded-lg shadow-sm">
+      <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-primary-600"></div>
+    </div>
+  }
+
+  <!-- Companies Table -->
+  @if (!loading()) {
+    <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
+      <div class="overflow-x-auto">
+        <p-table [value]="filteredCompanies()" dataKey="companyId" [scrollable]="true" [scrollHeight]="tableScrollHeight()" 
+          [paginator]="true" [rows]="rowsPerPage()" [showCurrentPageReport]="false"
+          [style]="{'width':'100%'}">
+          <ng-template pTemplate="header">
+            <tr class="bg-gray-50">
+              <th class="px-4 py-3 font-semibold text-gray-700 text-left text-sm" style="min-width: 250px;">
+                <span class="inline-flex items-center gap-1.5">
+                  Company
+                  <i class="pi pi-sort-alt text-gray-400 text-xs"></i>
+                </span>
+              </th>
+              <th class="px-4 py-3 font-semibold text-gray-700 text-left text-sm" style="min-width: 150px;">
+                <span class="inline-flex items-center gap-1.5">
+                  Code
+                  <i class="pi pi-sort-alt text-gray-400 text-xs"></i>
+                </span>
+              </th>
+              <th class="px-4 py-3 font-semibold text-gray-700 text-left text-sm" style="min-width: 200px;">
+                <span class="inline-flex items-center gap-1.5">
+                  Country
+                  <i class="pi pi-sort-alt text-gray-400 text-xs"></i>
+                </span>
+              </th>
+              <th class="px-4 py-3 font-semibold text-gray-700 text-left text-sm" style="min-width: 120px;">
+                <span class="inline-flex items-center gap-1.5">
+                  Status
+                  <i class="pi pi-sort-alt text-gray-400 text-xs"></i>
+                </span>
+              </th>
+              <th pFrozenColumn [frozen]="true" alignFrozen="right" class="px-4 py-3 font-semibold text-gray-700 text-center text-sm" style="width: 140px;">
+                Actions
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-company>
+            <tr class="border-b last:border-b-0 border-gray-100 hover:bg-gray-50 transition-colors">
+              <td class="px-4 py-2.5">
+                <div class="flex items-center">
+                  <div class="w-8 h-8 bg-gradient-to-br rounded-full flex items-center justify-center text-white font-bold text-xs" [ngClass]="getAvatarColor(company.companyName)">
+                    {{company.companyName.charAt(0)}}
+                  </div>
+                  <div class="ml-2.5">
+                    <p class="text-sm font-semibold text-gray-800">{{company.companyName}}</p>
+                    <p class="text-xs text-gray-500">{{company.website || 'No website'}}</p>
+                  </div>
+                </div>
+              </td>
+              <td class="px-4 py-2.5">
+                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                  {{company.companyCode}}
+                </span>
+              </td>
+              <td class="px-4 py-2.5 text-sm text-gray-700">
+                <span class="mr-2">{{ getCountryFlag(company.countryId) }}</span>
+                {{ getCountryName(company.countryId) }}
+              </td>
+              <td class="px-4 py-2.5">
+                <span 
+                  class="px-2.5 py-0.5 text-xs font-semibold rounded-full inline-block"
+                  [class.bg-green-100]="company.status === 'Active'"
+                  [class.text-green-700]="company.status === 'Active'"
+                  [class.bg-gray-100]="company.status !== 'Active'"
+                  [class.text-gray-700]="company.status !== 'Active'">
+                  {{company.status}}
+                </span>
+              </td>
+              <td pFrozenColumn [frozen]="true" alignFrozen="right" class="px-4 py-2.5 text-center" style="width: 140px;">
+                <div class="flex items-center justify-center space-x-1.5">
+                  <button (click)="navigateToEdit(company.companyId)" class="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="Edit">
+                    <i class="pi pi-pencil text-sm"></i>
+                  </button>
+                  <button (click)="navigateToView(company.companyId)" class="p-1.5 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors" title="View">
+                    <i class="pi pi-eye text-sm"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="paginatorright" let-state>
+            <div class="text-sm text-gray-600">
+              Showing {{state.first + 1}} to {{state.first + state.rows > state.totalRecords ? state.totalRecords : state.first + state.rows}} of {{state.totalRecords}} entries
+            </div>
+          </ng-template>
+          <ng-template pTemplate="paginatorleft">
+            <span></span>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  }
+</div>

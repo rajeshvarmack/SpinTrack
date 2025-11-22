@@ -1,0 +1,5 @@
+/* Ensure component doesn't add extra height */
+:host {
+  display: block;
+  overflow: hidden;
+}
