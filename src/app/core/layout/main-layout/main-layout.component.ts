@@ -21,6 +21,9 @@ export class MainLayoutComponent {
   isMobile = signal(typeof window !== 'undefined' ? window.innerWidth < 1024 : false);
   adminExpanded = signal(false);
   configExpanded = signal(false);
+  mastersExpanded = signal(false);
+  operationsExpanded = signal(false);
+  ticketSettingsExpanded = signal(false);
   hoveredMenu = signal<string | null>(null);
   currentRoute = signal(this.router.url);
 
@@ -35,7 +38,21 @@ export class MainLayoutComponent {
   isConfigRoute = computed(() => {
     const url = this.currentRoute();
     return url.includes('/countries') || url.includes('/currencies') || url.includes('/timezones') || 
-           url.includes('/dateformats') || url.includes('/companies');
+           url.includes('/dateformats') || url.includes('/companies') ||
+           url.includes('/ticket-priorities') || url.includes('/ticket-categories');
+  });
+
+  // Check if current route is under Masters section
+  isMastersRoute = computed(() => {
+    const url = this.currentRoute();
+    return url.includes('/products') || url.includes('/clients') || url.includes('/employees') ||
+           url.includes('/departments');
+  });
+
+  // Check if current route is under Operations section
+  isOperationsRoute = computed(() => {
+    const url = this.currentRoute();
+    return url.includes('/projects') || url.includes('/worklogs') || url.includes('/tickets');
   });
 
   // Only treat Admin as "active" when the explicit /admin route is navigated to.
@@ -64,6 +81,18 @@ export class MainLayoutComponent {
     this.configExpanded.update(expanded => !expanded);
   };
 
+  toggleMastersMenu = () => {
+    this.mastersExpanded.update(expanded => !expanded);
+  };
+
+  toggleOperationsMenu = () => {
+    this.operationsExpanded.update(expanded => !expanded);
+  };
+
+  toggleTicketSettingsMenu = () => {
+    this.ticketSettingsExpanded.update(expanded => !expanded);
+  };
+
   constructor() {
     // Listen to route changes and update current route
     this.router.events
@@ -78,6 +107,18 @@ export class MainLayoutComponent {
         // Auto-expand config menu when on configuration routes
         if (this.isConfigRoute()) {
           this.configExpanded.set(true);
+          // Also expand ticket settings if on ticket-related routes
+          if (this.currentRoute().includes('/ticket-')) {
+            this.ticketSettingsExpanded.set(true);
+          }
+        }
+        // Auto-expand masters menu when on masters routes
+        if (this.isMastersRoute()) {
+          this.mastersExpanded.set(true);
+        }
+        // Auto-expand operations menu when on operations routes
+        if (this.isOperationsRoute()) {
+          this.operationsExpanded.set(true);
         }
       });
 
@@ -88,6 +129,18 @@ export class MainLayoutComponent {
     // Auto-expand config menu when on configuration routes initially
     if (this.isConfigRoute()) {
       this.configExpanded.set(true);
+      // Also expand ticket settings if on ticket-related routes
+      if (this.currentRoute().includes('/ticket-')) {
+        this.ticketSettingsExpanded.set(true);
+      }
+    }
+    // Auto-expand masters menu when on masters routes initially
+    if (this.isMastersRoute()) {
+      this.mastersExpanded.set(true);
+    }
+    // Auto-expand operations menu when on operations routes initially
+    if (this.isOperationsRoute()) {
+      this.operationsExpanded.set(true);
     }
   }
 

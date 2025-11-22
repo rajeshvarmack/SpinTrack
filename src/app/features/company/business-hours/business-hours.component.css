@@ -1,0 +1,77 @@
+/* Component-specific styles */
+
+/* PrimeNG DatePicker custom styling */
+::ng-deep p-datepicker {
+  width: 100%;
+}
+
+::ng-deep p-datepicker .p-datepicker-input-icon-container {
+  width: 100%;
+}
+
+::ng-deep p-datepicker .p-inputtext {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: #111827;
+  transition: all 0.2s;
+}
+
+::ng-deep p-datepicker .p-inputtext:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+}
+
+::ng-deep p-datepicker .p-inputtext:disabled {
+  background-color: #f9fafb;
+  cursor: not-allowed;
+}
+
+::ng-deep p-datepicker .p-inputtext::placeholder {
+  color: #9ca3af;
+}
+
+/* Error state for datepicker */
+::ng-deep p-datepicker.border-red-400 .p-inputtext {
+  border-color: #f87171;
+}
+
+::ng-deep p-datepicker.border-red-400 .p-inputtext:focus {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.5);
+}
+
+/* Time picker panel styling */
+::ng-deep .p-datepicker-timeonly .p-datepicker-time-picker {
+  border: none;
+  padding: 1rem;
+}
+
+::ng-deep .p-datepicker-timeonly {
+  width: auto;
+  min-width: 280px;
+}
+
+/* Hour/Minute buttons */
+::ng-deep .p-datepicker .p-datepicker-time-picker button {
+  color: #3b82f6;
+  border-radius: 0.375rem;
+  transition: all 0.15s;
+}
+
+::ng-deep .p-datepicker .p-datepicker-time-picker button:hover {
+  background-color: #eff6ff;
+  color: #2563eb;
+}
+
+::ng-deep .p-datepicker .p-datepicker-time-picker span {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+

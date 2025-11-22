@@ -74,6 +74,14 @@ export class CompanyViewComponent implements OnInit {
     this.companyService.getBusinessDays(id).subscribe(days => {
       this.stateService.setBusinessDays(days);
     });
+    
+    this.companyService.getBusinessHours(id).subscribe(hours => {
+      this.stateService.setBusinessHours(hours);
+    });
+    
+    this.companyService.getBusinessHolidays(id).subscribe(holidays => {
+      this.stateService.setHolidays(holidays);
+    });
   }
 
   loadReferenceData(company: Company) {

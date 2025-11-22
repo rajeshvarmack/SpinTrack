@@ -1,1 +1,349 @@
-<p>holidays works!</p>
+<div class="p-6 space-y-4">
+  <!-- Show message if no company ID (new company) -->
+  @if (!companyId()) {
+    <div class="bg-blue-50 border border-blue-200 rounded-xl p-6 text-center">
+      <div class="flex flex-col items-center gap-4">
+        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
+          <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-lg font-bold text-gray-900 mb-2">Save Company First</h3>
+          <p class="text-gray-600 text-sm">
+            Please fill in the company information and save the company before adding holidays.
+          </p>
+        </div>
+      </div>
+    </div>
+  }
+  
+  <!-- Show holidays management if company ID exists -->
+  @if (companyId()) {
+  <!-- Header Section with Stats -->
+  <div class="flex justify-between items-start flex-wrap gap-3">
+    <div>
+      <h2 class="text-2xl font-bold text-gray-900">Business Holidays</h2>
+      <p class="text-sm text-gray-600">Configure company holidays and observances</p>
+    </div>
+    
+    <!-- Action Button - Only show if there are holidays -->
+    @if (holidays().length > 0) {
+      <button type="button" (click)="toggleAddDialog()" 
+              class="px-4 py-2 text-white rounded-lg transition-all duration-200 shadow-md hover:shadow-lg flex items-center gap-2 text-sm font-semibold"
+              [ngClass]="showAddDialog() ? 'bg-gray-600 hover:bg-gray-700' : 'bg-blue-600 hover:bg-blue-700'">
+        @if (showAddDialog()) {
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+          Cancel
+        } @else {
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+          </svg>
+          Add Holiday
+        }
+      </button>
+    }
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+    <div class="relative overflow-hidden bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 px-4 py-2.5 flex items-center justify-center gap-3 border border-blue-200 transform hover:-translate-y-0.5">
+      <div class="absolute top-0 right-0 w-20 h-20 bg-blue-500/5 rounded-full -mr-10 -mt-10"></div>
+      <div class="relative text-3xl">📅</div>
+      <div class="relative flex flex-col">
+        <p class="text-2xl font-bold text-blue-800 leading-none mb-1">{{ totalHolidays() }}</p>
+        <h3 class="text-blue-700 text-[10px] font-semibold uppercase tracking-wide">Total Holidays</h3>
+      </div>
+    </div>
+    
+    <div class="relative overflow-hidden bg-gradient-to-br from-green-50 to-green-100 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 px-4 py-2.5 flex items-center justify-center gap-3 border border-green-200 transform hover:-translate-y-0.5">
+      <div class="absolute top-0 right-0 w-20 h-20 bg-green-500/5 rounded-full -mr-10 -mt-10"></div>
+      <div class="relative text-3xl">🏛️</div>
+      <div class="relative flex flex-col">
+        <p class="text-2xl font-bold text-green-800 leading-none mb-1">{{ publicHolidays() }}</p>
+        <h3 class="text-green-700 text-[10px] font-semibold uppercase tracking-wide">Public</h3>
+      </div>
+    </div>
+    
+    <div class="relative overflow-hidden bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 px-4 py-2.5 flex items-center justify-center gap-3 border border-purple-200 transform hover:-translate-y-0.5">
+      <div class="absolute top-0 right-0 w-20 h-20 bg-purple-500/5 rounded-full -mr-10 -mt-10"></div>
+      <div class="relative text-3xl">🏢</div>
+      <div class="relative flex flex-col">
+        <p class="text-2xl font-bold text-purple-800 leading-none mb-1">{{ companyHolidays() }}</p>
+        <h3 class="text-purple-700 text-[10px] font-semibold uppercase tracking-wide">Company</h3>
+      </div>
+    </div>
+    
+    <div class="relative overflow-hidden bg-gradient-to-br from-amber-50 to-amber-100 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 px-4 py-2.5 flex items-center justify-center gap-3 border border-amber-200 transform hover:-translate-y-0.5">
+      <div class="absolute top-0 right-0 w-20 h-20 bg-amber-500/5 rounded-full -mr-10 -mt-10"></div>
+      <div class="relative text-3xl">⭐</div>
+      <div class="relative flex flex-col">
+        <p class="text-2xl font-bold text-amber-800 leading-none mb-1">{{ optionalHolidays() }}</p>
+        <h3 class="text-amber-700 text-[10px] font-semibold uppercase tracking-wide">Optional</h3>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add/Edit Form - Show when no holidays OR when add dialog is open -->
+  @if (holidays().length === 0 || showAddDialog()) {
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden animate-fadeIn">
+      <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-200 px-4 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center shrink-0">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+          </div>
+          <h3 class="text-base font-bold text-gray-900">
+            {{ editingHoliday() ? 'Edit Holiday' : (holidays().length === 0 ? 'Add Your First Holiday' : 'Add New Holiday') }}
+          </h3>
+        </div>
+        @if (holidays().length > 0) {
+          <button (click)="closeDialog()" class="p-1.5 hover:bg-white/50 rounded-lg transition-colors">
+            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        }
+      </div>
+      
+      <form [formGroup]="holidayForm" (ngSubmit)="saveHoliday()" class="p-4 space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Holiday Name -->
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">Holiday Name *</label>
+            <input type="text" formControlName="holidayName" 
+                   class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                   placeholder="e.g., New Year's Day">
+          </div>
+          
+          <!-- Holiday Date -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">Date *</label>
+            <p-datepicker formControlName="holidayDate"
+                        [iconDisplay]="'button'"
+                        placeholder="Select date"
+                        [showIcon]="true"
+                        styleClass="w-full"
+                        appendTo="body">
+            </p-datepicker>
+          </div>
+          
+          <!-- Holiday Type -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">Type *</label>
+            <ng-select formControlName="holidayType"
+                      [items]="holidayTypes"
+                      [clearable]="false"
+                      [searchable]="false"
+                      placeholder="Select type">
+            </ng-select>
+          </div>
+          
+          <!-- Country -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">Country (Optional)</label>
+            <ng-select formControlName="countryId"
+                      [items]="countries()"
+                      bindLabel="countryName"
+                      bindValue="countryId"
+                      [clearable]="true"
+                      placeholder="All Countries"
+                      appendTo="body">
+            </ng-select>
+          </div>
+          
+          <!-- Full Day Toggle -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">Duration</label>
+            <label class="flex items-center gap-2 cursor-pointer group h-[38px]">
+              <input type="checkbox" 
+                     formControlName="isFullDay" 
+                     class="sr-only peer">
+              <div class="relative w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+              <span class="text-sm font-medium text-gray-700 group-hover:text-gray-900">Full Day Holiday</span>
+            </label>
+          </div>
+        </div>
+        
+        <!-- Partial Day Time Fields -->
+        @if (!holidayForm.get('isFullDay')?.value) {
+          <div class="grid grid-cols-2 gap-4 p-4 bg-blue-50 rounded-lg border border-blue-200 animate-fadeIn">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1.5">Start Time *</label>
+              <p-datepicker formControlName="startTime"
+                          [timeOnly]="true"
+                          hourFormat="24"
+                          [stepMinute]="15"
+                          [iconDisplay]="'button'"
+                          [showIcon]="true"
+                          placeholder="Start time"
+                          styleClass="w-full"
+                          appendTo="body">
+              </p-datepicker>
+            </div>
+            
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1.5">End Time *</label>
+              <p-datepicker formControlName="endTime"
+                          [timeOnly]="true"
+                          hourFormat="24"
+                          [stepMinute]="15"
+                          [iconDisplay]="'button'"
+                          [showIcon]="true"
+                          placeholder="End time"
+                          styleClass="w-full"
+                          appendTo="body">
+              </p-datepicker>
+            </div>
+          </div>
+        }
+        
+        <!-- Form Actions -->
+        <div class="flex justify-end gap-2 pt-2">
+          @if (holidays().length > 0 && showAddDialog()) {
+            <button type="button" (click)="closeDialog()" 
+                    class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium text-sm">
+              Cancel
+            </button>
+          }
+          <button type="submit" 
+                  [disabled]="!holidayForm.valid || isSaving()"
+                  class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed font-medium text-sm">
+            @if (isSaving()) {
+              <span class="flex items-center gap-2">
+                <span class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                Saving...
+              </span>
+            } @else {
+              <span>{{ editingHoliday() ? 'Update' : 'Add' }} Holiday</span>
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+  }
+
+  <!-- Holidays List - Only show when there are holidays AND form is not open -->
+  @if (holidays().length > 0 && !showAddDialog()) {
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+      <div class="border-b border-gray-200 px-4 py-3 flex items-center justify-between">
+        <h3 class="text-base font-bold text-gray-900">Holiday Calendar</h3>
+        <span class="text-xs text-gray-500 font-medium">{{ holidays().length }} total</span>
+      </div>
+      
+      <div class="p-4">
+        @if (isLoading()) {
+          <div class="flex items-center justify-center py-12">
+            <div class="w-10 h-10 border-4 border-gray-200 border-t-blue-600 rounded-full animate-spin"></div>
+          </div>
+        }
+        
+        @if (!isLoading()) {
+          <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead>
+              <tr class="bg-gray-50 border-b border-gray-200">
+                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Date</th>
+                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Holiday Name</th>
+                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Type</th>
+                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Duration</th>
+                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Country</th>
+                <th class="px-4 py-3 text-right text-xs font-semibold text-gray-700 uppercase tracking-wider">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              @for (holiday of holidays(); track holiday.businessHolidayId) {
+                <tr class="hover:bg-gray-50 transition-colors">
+                  <!-- Date -->
+                  <td class="px-4 py-3 whitespace-nowrap">
+                    <div class="flex items-center gap-3">
+                      <div class="w-12 h-12 rounded-lg bg-gradient-to-br text-white flex flex-col items-center justify-center shadow-sm"
+                           [ngClass]="{
+                             'from-green-500 to-green-600': holiday.holidayType === 'Public',
+                             'from-purple-500 to-purple-600': holiday.holidayType === 'Company',
+                             'from-amber-500 to-amber-600': holiday.holidayType === 'Optional'
+                           }">
+                        <div class="text-[9px] font-semibold uppercase opacity-90">{{ getMonthName(holiday.holidayDate) }}</div>
+                        <div class="text-lg font-bold leading-none">{{ getDay(holiday.holidayDate) }}</div>
+                      </div>
+                      <div class="text-xs text-gray-500">{{ getDayOfWeek(holiday.holidayDate) }}</div>
+                    </div>
+                  </td>
+                  
+                  <!-- Holiday Name -->
+                  <td class="px-4 py-3">
+                    <div class="text-sm font-semibold text-gray-900">{{ holiday.holidayName }}</div>
+                  </td>
+                  
+                  <!-- Type -->
+                  <td class="px-4 py-3 whitespace-nowrap">
+                    <span class="px-2.5 py-1 rounded-full text-xs font-semibold"
+                          [ngClass]="{
+                            'bg-green-100 text-green-700': holiday.holidayType === 'Public',
+                            'bg-purple-100 text-purple-700': holiday.holidayType === 'Company',
+                            'bg-amber-100 text-amber-700': holiday.holidayType === 'Optional'
+                          }">
+                      {{ holiday.holidayType }}
+                    </span>
+                  </td>
+                  
+                  <!-- Duration -->
+                  <td class="px-4 py-3 whitespace-nowrap">
+                    @if (holiday.isFullDay) {
+                      <span class="text-sm text-gray-600">Full Day</span>
+                    } @else {
+                      <div class="flex items-center gap-1 text-xs text-gray-600">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <span>{{ holiday.startTime }} - {{ holiday.endTime }}</span>
+                      </div>
+                    }
+                  </td>
+                  
+                  <!-- Country -->
+                  <td class="px-4 py-3">
+                    <span class="text-sm text-gray-600">{{ getCountryName(holiday.countryId) }}</span>
+                  </td>
+                  
+                  <!-- Actions -->
+                  <td class="px-4 py-3 whitespace-nowrap text-right">
+                    <div class="flex items-center justify-end gap-2">
+                      <button (click)="openEditDialog(holiday)" 
+                              class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                              title="Edit Holiday">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                        </svg>
+                      </button>
+                      <button (click)="deleteHoliday(holiday.businessHolidayId)" 
+                              class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                              title="Delete Holiday">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- Loading Overlay -->
+  @if (isLoading()) {
+    <div class="absolute inset-0 bg-white/95 flex flex-col items-center justify-center gap-4 z-50 rounded-2xl">
+      <div class="w-12 h-12 border-4 border-gray-200 border-t-blue-600 rounded-full animate-spin"></div>
+      <p class="text-base font-semibold text-gray-600">Loading holidays...</p>
+    </div>
+  }
+  } <!-- End of @if (companyId()) -->
+</div>

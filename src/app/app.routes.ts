@@ -44,6 +44,18 @@ export const routes: Routes = [
       { path: 'currencies', component: CurrencyFormComponent },
       { path: 'timezones', component: TimeZoneFormComponent },
       { path: 'dateformats', component: DateFormatFormComponent },
+      // Masters routes (placeholder - redirect to dashboard until components are created)
+      { path: 'products', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'clients', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'employees', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'departments', redirectTo: 'dashboard', pathMatch: 'full' },
+      // Operations routes (placeholder - redirect to dashboard until components are created)
+      { path: 'projects', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'worklogs', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'tickets', redirectTo: 'dashboard', pathMatch: 'full' },
+      // Ticket Settings routes (placeholder)
+      { path: 'ticket-priorities', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'ticket-categories', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'companies', component: CompanyListComponent },
       { 
         path: 'companies/add', 

@@ -65,45 +65,238 @@
     </div>
   </div>
 
-  <!-- Business Hours Card (Coming Soon) -->
-  <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden opacity-60">
-    <div class="px-6 py-4 border-b border-gray-200">
+  <!-- Business Hours Card -->
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-300">
+    <div class="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-purple-50 to-pink-50">
       <div class="flex items-center justify-between">
-        <div>
-          <h3 class="text-lg font-bold text-gray-900">Business Hours</h3>
-          <p class="text-sm text-gray-600">Daily operating hours configuration</p>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center shadow-sm">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-lg font-bold text-gray-900">Business Hours</h3>
+            <p class="text-sm text-gray-600">Daily operating hours configuration</p>
+          </div>
         </div>
-        <span class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-semibold">Coming Soon</span>
       </div>
     </div>
     <div class="p-6">
-      <div class="text-center py-8">
-        <svg class="w-12 h-12 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-        </svg>
-        <p class="text-gray-500 text-sm">Business hours configuration will be available soon</p>
-      </div>
+      @if (businessHours().length > 0) {
+        <div class="space-y-3">
+          @for (hour of businessHours(); track hour.businessHoursId) {
+            <div class="flex items-center justify-between p-4 rounded-xl border-2 transition-all duration-200"
+                 [ngClass]="{
+                   'bg-gradient-to-r from-emerald-50 to-teal-50 border-emerald-200 hover:shadow-md': hour.status === 'Active',
+                   'bg-gray-50 border-gray-200 opacity-60': hour.status !== 'Active'
+                 }">
+              <div class="flex items-center gap-4 flex-1">
+                <!-- Day Circle -->
+                <div class="w-14 h-14 rounded-full flex items-center justify-center shadow-sm"
+                     [ngClass]="{
+                       'bg-gradient-to-br from-emerald-500 to-teal-600': hour.status === 'Active',
+                       'bg-gray-400': hour.status !== 'Active'
+                     }">
+                  <span class="text-white font-bold text-sm">{{ hour.dayOfWeek.substring(0, 2) }}</span>
+                </div>
+                
+                <!-- Day Name -->
+                <div class="min-w-[120px]">
+                  <p class="font-bold text-gray-900 text-base">{{ hour.dayOfWeek }}</p>
+                  <p class="text-xs text-gray-500">
+                    @if (hour.status === 'Active') {
+                      <span class="text-emerald-600 font-semibold">● Operating</span>
+                    } @else {
+                      <span class="text-gray-500">● Closed</span>
+                    }
+                  </p>
+                </div>
+                
+                <!-- Time Range with Visual Bar -->
+                @if (hour.status === 'Active') {
+                  <div class="flex-1 flex items-center gap-4">
+                    <!-- Start Time -->
+                    <div class="text-center bg-white rounded-lg px-3 py-2 shadow-sm border border-emerald-200">
+                      <p class="text-xs text-gray-500 uppercase font-semibold mb-0.5">Start</p>
+                      <p class="text-lg font-bold text-gray-900">{{ hour.startTime }}</p>
+                    </div>
+                    
+                    <!-- Visual Timeline Bar -->
+                    <div class="flex-1 relative">
+                      <div class="h-2 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-full shadow-inner"></div>
+                      <div class="absolute inset-0 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clip-rule="evenodd"/>
+                        </svg>
+                      </div>
+                    </div>
+                    
+                    <!-- End Time -->
+                    <div class="text-center bg-white rounded-lg px-3 py-2 shadow-sm border border-teal-200">
+                      <p class="text-xs text-gray-500 uppercase font-semibold mb-0.5">End</p>
+                      <p class="text-lg font-bold text-gray-900">{{ hour.endTime }}</p>
+                    </div>
+                    
+                    <!-- Duration Badge -->
+                    <div class="bg-white rounded-lg px-3 py-2 shadow-sm border border-emerald-200">
+                      <p class="text-xs text-gray-500 uppercase font-semibold mb-0.5">Duration</p>
+                      <p class="text-sm font-bold text-emerald-600">{{ calculateDuration(hour.startTime, hour.endTime) }}h</p>
+                    </div>
+                  </div>
+                } @else {
+                  <div class="flex-1 text-center">
+                    <span class="inline-flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-600 rounded-lg font-semibold text-sm">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                      </svg>
+                      Closed
+                    </span>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="text-center py-12">
+          <div class="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-10 h-10 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <p class="text-gray-500 font-medium text-lg">No business hours configured</p>
+          <p class="text-sm text-gray-400 mt-1">Set up your operating hours in edit mode</p>
+        </div>
+      }
     </div>
   </div>
 
-  <!-- Holidays Card (Coming Soon) -->
-  <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden opacity-60">
-    <div class="px-6 py-4 border-b border-gray-200">
+  <!-- Holidays Card -->
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-300">
+    <div class="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-amber-50 to-orange-50">
       <div class="flex items-center justify-between">
-        <div>
-          <h3 class="text-lg font-bold text-gray-900">Holidays</h3>
-          <p class="text-sm text-gray-600">Company holiday calendar</p>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-amber-600 rounded-lg flex items-center justify-center shadow-sm">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-lg font-bold text-gray-900">Company Holidays</h3>
+            <p class="text-sm text-gray-600">Annual holiday calendar & observances</p>
+          </div>
         </div>
-        <span class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-semibold">Coming Soon</span>
+        @if (holidays().length > 0) {
+          <div class="text-right">
+            <p class="text-2xl font-bold text-amber-600">{{ holidays().length }}</p>
+            <p class="text-xs text-gray-600 uppercase tracking-wide">Total Holidays</p>
+          </div>
+        }
       </div>
     </div>
     <div class="p-6">
-      <div class="text-center py-8">
-        <svg class="w-12 h-12 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
-        </svg>
-        <p class="text-gray-500 text-sm">Holiday calendar will be available soon</p>
-      </div>
+      @if (holidays().length > 0) {
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          @for (holiday of sortedHolidays(); track holiday.businessHolidayId) {
+            <div class="group relative overflow-hidden rounded-xl border-2 transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+                 [ngClass]="{
+                   'border-green-200 bg-gradient-to-br from-green-50 to-emerald-50': holiday.holidayType === 'Public',
+                   'border-purple-200 bg-gradient-to-br from-purple-50 to-pink-50': holiday.holidayType === 'Company',
+                   'border-amber-200 bg-gradient-to-br from-amber-50 to-yellow-50': holiday.holidayType === 'Optional'
+                 }">
+              <!-- Decorative Corner Badge -->
+              <div class="absolute top-0 right-0 w-16 h-16 opacity-10"
+                   [ngClass]="{
+                     'bg-green-500': holiday.holidayType === 'Public',
+                     'bg-purple-500': holiday.holidayType === 'Company',
+                     'bg-amber-500': holiday.holidayType === 'Optional'
+                   }"
+                   style="border-radius: 0 0 0 100%;"></div>
+              
+              <div class="p-5 relative">
+                <!-- Calendar Date Display -->
+                <div class="flex items-start gap-4 mb-3">
+                  <div class="text-center min-w-[60px]">
+                    <div class="rounded-lg shadow-sm overflow-hidden border-2"
+                         [ngClass]="{
+                           'border-green-500': holiday.holidayType === 'Public',
+                           'border-purple-500': holiday.holidayType === 'Company',
+                           'border-amber-500': holiday.holidayType === 'Optional'
+                         }">
+                      <div class="px-2 py-1 text-white font-bold text-xs uppercase"
+                           [ngClass]="{
+                             'bg-green-500': holiday.holidayType === 'Public',
+                             'bg-purple-500': holiday.holidayType === 'Company',
+                             'bg-amber-500': holiday.holidayType === 'Optional'
+                           }">
+                        {{ getMonthName(holiday.holidayDate) }}
+                      </div>
+                      <div class="bg-white px-2 py-2">
+                        <p class="text-2xl font-bold text-gray-900 leading-none">{{ getDay(holiday.holidayDate) }}</p>
+                      </div>
+                    </div>
+                    <p class="text-xs text-gray-500 font-medium mt-1">{{ getDayOfWeek(holiday.holidayDate) }}</p>
+                  </div>
+                  
+                  <!-- Holiday Details -->
+                  <div class="flex-1">
+                    <h4 class="font-bold text-gray-900 text-base mb-2 line-clamp-2 group-hover:text-gray-700 transition-colors">
+                      {{ holiday.holidayName }}
+                    </h4>
+                    
+                    <!-- Type Badge -->
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold mb-2"
+                          [ngClass]="{
+                            'bg-green-100 text-green-700': holiday.holidayType === 'Public',
+                            'bg-purple-100 text-purple-700': holiday.holidayType === 'Company',
+                            'bg-amber-100 text-amber-700': holiday.holidayType === 'Optional'
+                          }">
+                      @if (holiday.holidayType === 'Public') {
+                        🏛️
+                      } @else if (holiday.holidayType === 'Company') {
+                        🏢
+                      } @else {
+                        ⭐
+                      }
+                      {{ holiday.holidayType }}
+                    </span>
+                    
+                    <!-- Duration Info -->
+                    <div class="mt-2 flex items-center gap-2 text-xs text-gray-600">
+                      @if (holiday.isFullDay) {
+                        <div class="flex items-center gap-1">
+                          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                          </svg>
+                          <span class="font-medium">Full Day</span>
+                        </div>
+                      } @else {
+                        <div class="flex items-center gap-1">
+                          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                          </svg>
+                          <span class="font-medium">{{ holiday.startTime }} - {{ holiday.endTime }}</span>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="text-center py-12">
+          <div class="w-20 h-20 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-10 h-10 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+          </div>
+          <p class="text-gray-500 font-medium text-lg">No holidays configured</p>
+          <p class="text-sm text-gray-400 mt-1">Add company holidays in edit mode</p>
+        </div>
+      }
     </div>
   </div>
 </div>

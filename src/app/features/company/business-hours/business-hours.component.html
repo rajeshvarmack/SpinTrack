@@ -1,1 +1,265 @@
-<p>business-hours works!</p>
+<div class="p-6 space-y-4">
+  <!-- Header Section with Stats -->
+  <div class="flex justify-between items-start flex-wrap gap-3">
+    <div>
+      <h2 class="text-2xl font-bold text-gray-900">Business Hours</h2>
+      <p class="text-sm text-gray-600">Configure working hours and shifts for each day of the week</p>
+    </div>
+    
+    <!-- Statistics Cards -->
+    <div class="flex gap-2">
+      <div class="group relative overflow-hidden px-4 py-2.5 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 shadow-sm hover:shadow-md transform hover:-translate-y-0.5 transition-all duration-200 min-w-[140px]">
+        <div class="absolute top-0 right-0 w-20 h-20 bg-blue-500/5 rounded-full -mr-10 -mt-10"></div>
+        <div class="relative flex items-center gap-3">
+          <div class="text-3xl">⏰</div>
+          <div>
+            <div class="text-2xl font-bold leading-none mb-1 text-blue-700">{{ totalWeeklyHours() }}<span class="text-sm opacity-90">h</span></div>
+            <div class="text-[10px] font-semibold uppercase tracking-wide text-blue-600">Weekly Hours</div>
+          </div>
+        </div>
+      </div>
+      <div class="group relative overflow-hidden px-4 py-2.5 rounded-xl bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 shadow-sm hover:shadow-md transform hover:-translate-y-0.5 transition-all duration-200 min-w-[140px]">
+        <div class="absolute top-0 right-0 w-20 h-20 bg-purple-500/5 rounded-full -mr-10 -mt-10"></div>
+        <div class="relative flex items-center gap-3">
+          <div class="text-3xl">📊</div>
+          <div>
+            <div class="text-2xl font-bold leading-none mb-1 text-purple-700">{{ totalShiftsCount() }}</div>
+            <div class="text-[10px] font-semibold uppercase tracking-wide text-purple-600">Total Schedules</div>
+          </div>
+        </div>
+      </div>
+      <div class="group relative overflow-hidden px-4 py-2.5 rounded-xl bg-gradient-to-br from-green-50 to-green-100 border border-green-200 shadow-sm hover:shadow-md transform hover:-translate-y-0.5 transition-all duration-200 min-w-[140px]">
+        <div class="absolute top-0 right-0 w-20 h-20 bg-green-500/5 rounded-full -mr-10 -mt-10"></div>
+        <div class="relative flex items-center gap-3">
+          <div class="text-3xl">📅</div>
+          <div>
+            <div class="text-2xl font-bold leading-none mb-1 text-green-700">{{ activeDaysCount() }}</div>
+            <div class="text-[10px] font-semibold uppercase tracking-wide text-green-600">Active Days</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Visual Week Overview -->
+  <div class="bg-gray-50 border border-gray-200 rounded-xl p-4 shadow-sm">
+    <div class="mb-3">
+      <h3 class="text-base font-bold text-gray-900">Week Overview</h3>
+      <p class="text-xs text-gray-600 mt-1">Toggle working days to configure business hours</p>
+    </div>
+    <div class="grid grid-cols-7 gap-2">
+      @for (shift of getShiftsArray().controls; track $index) {
+        <div class="bg-white rounded-lg p-3 border-2 transition-all duration-200 hover:shadow-sm"
+             [ngClass]="shift.get('isWorkingShift')?.value ? 'border-green-500 bg-green-50/30' : 'border-gray-200'">
+          <div class="text-center space-y-1.5">
+            <div class="text-xs font-bold text-gray-700 uppercase tracking-wide">{{ shift.get('dayOfWeek')?.value.substring(0, 3) }}</div>
+            <div class="flex flex-col gap-1">
+              @if (!shift.get('isWorkingShift')?.value) {
+                <div class="w-full h-6 rounded bg-gray-100 flex items-center justify-center">
+                  <span class="text-gray-400 text-xs">Off</span>
+                </div>
+              } @else {
+                <div class="w-full px-1.5 py-1 rounded bg-gradient-to-r from-green-500 to-green-600 text-white text-[9px] font-bold leading-tight shadow-sm">
+                  {{ shift.get('startTime')?.value | date:'shortTime' }} - {{ shift.get('endTime')?.value | date:'shortTime' }}
+                </div>
+              }
+            </div>
+            <div class="text-[10px] font-bold"
+                 [ngClass]="shift.get('isWorkingShift')?.value ? 'text-green-600' : 'text-gray-400'">
+              {{ shift.get('isWorkingShift')?.value ? calculateDuration(shift.get('startTime')?.value, shift.get('endTime')?.value) : '0h' }}
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Shifts Configuration -->
+  <form [formGroup]="businessHoursForm">
+    <div formArrayName="shifts" class="space-y-3">
+      <div class="flex items-center justify-between">
+        <h3 class="text-base font-bold text-gray-900">Working Hours Configuration</h3>
+        <span class="text-xs text-gray-600 font-medium">{{ activeDaysCount() }} working day(s) configured</span>
+      </div>
+
+      @for (shiftControl of getShiftsArray().controls; track $index) {
+        <div [formGroupName]="$index"
+             class="bg-white border-2 rounded-xl p-4 shadow-sm transition-all duration-200"
+             [ngClass]="{
+               'border-green-300 bg-green-50/20': getShiftFormGroup($index).get('isWorkingShift')?.value && !getShiftFormGroup($index).errors?.['timeRangeInvalid'],
+               'border-red-300 bg-red-50/30': getShiftFormGroup($index).errors?.['timeRangeInvalid'] && getShiftFormGroup($index).get('isWorkingShift')?.value,
+               'border-gray-200 bg-gray-50/50': !getShiftFormGroup($index).get('isWorkingShift')?.value
+             }">
+          
+          <div class="flex items-start gap-4">
+            <!-- Day Name Badge -->
+            <div class="flex-shrink-0">
+              <label class="block text-xs font-medium text-gray-700 mb-1">&nbsp;</label>
+              <div class="w-16 h-[38px] rounded-lg flex items-center justify-center text-white font-bold text-xs shadow-md"
+                   [ngClass]="getShiftFormGroup($index).get('isWorkingShift')?.value ? 'bg-gradient-to-br from-green-500 to-green-600' : 'bg-gradient-to-br from-gray-400 to-gray-500'">
+                {{ getShiftFormGroup($index).get('dayOfWeek')?.value.substring(0, 3).toUpperCase() }}
+              </div>
+            </div>
+
+            <!-- Working Day Toggle -->
+            <div class="flex-shrink-0">
+              <label class="block text-xs font-medium text-gray-700 mb-1">Working Day</label>
+              <div class="h-[38px] flex items-center">
+                <label class="cursor-pointer">
+                  <input type="checkbox" formControlName="isWorkingShift" class="sr-only peer">
+                  <div class="relative w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-green-200 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all after:shadow-sm peer-checked:bg-gradient-to-r peer-checked:from-green-500 peer-checked:to-green-600"></div>
+                </label>
+              </div>
+            </div>
+
+            <!-- Form Fields -->
+            <div class="flex-1 grid grid-cols-3 gap-4"
+                 [class.opacity-50]="!getShiftFormGroup($index).get('isWorkingShift')?.value">
+              
+              <!-- Schedule Name -->
+              <div>
+                <label class="block text-xs font-medium text-gray-700 mb-1">
+                  <span class="flex items-center gap-1">
+                    <svg class="w-3.5 h-3.5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                    </svg>
+                    Schedule Name
+                  </span>
+                </label>
+                <input 
+                  type="text" 
+                  formControlName="shiftName"
+                  [readOnly]="!getShiftFormGroup($index).get('isWorkingShift')?.value"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-900 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent placeholder:text-gray-400 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                  [class.bg-gray-100]="!getShiftFormGroup($index).get('isWorkingShift')?.value"
+                  [class.cursor-not-allowed]="!getShiftFormGroup($index).get('isWorkingShift')?.value"
+                  placeholder="e.g. Regular Hours">
+              </div>
+
+              <!-- Start Time -->
+              <div>
+                <label class="block text-xs font-medium text-gray-700 mb-1">
+                  <span class="flex items-center gap-1">
+                    <svg class="w-3.5 h-3.5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    Start Time
+                  </span>
+                </label>
+                <p-datepicker 
+                  formControlName="startTime"
+                  [timeOnly]="true"
+                  hourFormat="24"
+                  [stepMinute]="15"
+                  [disabled]="!getShiftFormGroup($index).get('isWorkingShift')?.value"
+                  placeholder="Select time"
+                  [iconDisplay]="'input'"
+                  styleClass="w-full">
+                  <ng-template #inputicon>
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                  </ng-template>
+                </p-datepicker>
+              </div>
+
+              <!-- End Time -->
+              <div>
+                <label class="block text-xs font-medium text-gray-700 mb-1">
+                  <span class="flex items-center gap-1">
+                    <svg class="w-3.5 h-3.5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    End Time
+                  </span>
+                </label>
+                <p-datepicker 
+                  formControlName="endTime"
+                  [timeOnly]="true"
+                  hourFormat="24"
+                  [stepMinute]="15"
+                  [disabled]="!getShiftFormGroup($index).get('isWorkingShift')?.value"
+                  placeholder="Select time"
+                  [iconDisplay]="'input'"
+                  [styleClass]="getShiftFormGroup($index).errors?.['timeRangeInvalid'] ? 'w-full border-red-400' : 'w-full'">
+                  <ng-template #inputicon>
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                  </ng-template>
+                </p-datepicker>
+                @if (getShiftFormGroup($index).errors?.['timeRangeInvalid'] && getShiftFormGroup($index).get('isWorkingShift')?.value) {
+                  <div class="flex items-center gap-1 text-[10px] text-red-600 font-semibold mt-0.5">
+                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                    </svg>
+                    Invalid range
+                  </div>
+                }
+              </div>
+            </div>
+
+            <!-- Duration & Overtime -->
+            <div class="flex-shrink-0 flex items-start gap-3"
+                 [class.opacity-50]="!getShiftFormGroup($index).get('isWorkingShift')?.value">
+              <!-- Duration Badge -->
+              <div class="flex flex-col">
+                <label class="block text-xs font-medium text-gray-700 mb-1">Duration</label>
+                <div class="h-[38px] flex items-center">
+                  <div class="px-2.5 py-1 rounded-lg text-white shadow-md text-center min-w-[55px]"
+                       [ngClass]="getShiftFormGroup($index).get('isWorkingShift')?.value ? 'bg-gradient-to-r from-green-500 to-green-600' : 'bg-gradient-to-r from-gray-400 to-gray-500'">
+                    <div class="text-base font-bold leading-none">
+                      {{ getShiftFormGroup($index).get('isWorkingShift')?.value ? calculateDuration(getShiftFormGroup($index).value.startTime, getShiftFormGroup($index).value.endTime) : '0h' }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Overtime Toggle -->
+              <div class="flex flex-col">
+                <label class="block text-xs font-medium text-gray-700 mb-1">Overtime</label>
+                <div class="h-[38px] flex items-center">
+                  <label class="cursor-pointer">
+                    <input type="checkbox" 
+                           formControlName="isOvertimeEligible"
+                           [disabled]="!getShiftFormGroup($index).get('isWorkingShift')?.value"
+                           class="sr-only peer">
+                    <div class="relative w-9 h-5 bg-gray-300 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-200 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all after:shadow-sm peer-checked:bg-gradient-to-r peer-checked:from-blue-500 peer-checked:to-blue-600 peer-disabled:opacity-50 peer-disabled:cursor-not-allowed"></div>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="border-t border-gray-200 pt-4 mt-4">
+      <div class="flex justify-end">
+        <button 
+          type="button" 
+          (click)="saveBusinessHours()"
+          [disabled]="!businessHoursForm.valid || isSaving()"
+          class="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-sm">
+          @if (isSaving()) {
+            <span class="flex items-center gap-2">
+              <span class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+              Saving...
+            </span>
+          } @else {
+            <span>Save Business Hours</span>
+          }
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <!-- Loading Overlay -->
+  @if (isLoading()) {
+    <div class="absolute inset-0 bg-white/95 flex flex-col items-center justify-center gap-4 z-50 rounded-2xl">
+      <div class="w-12 h-12 border-4 border-gray-200 border-t-blue-600 rounded-full animate-spin"></div>
+      <p class="text-base font-semibold text-gray-600">Loading business hours...</p>
+    </div>
+  }
+</div>
